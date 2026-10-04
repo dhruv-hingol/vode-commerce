@@ -24,23 +24,40 @@ export default function ProductDetail({ product }: { product: Product }) {
         <div className="detail-art">
           <Image
             src={product.image}
-            alt={product.name + " — illustrative sample"}
+            alt={
+              product.name + (product.isSample ? " — illustrative sample" : "")
+            }
             width={700}
             height={800}
             priority
           />
-          <span className="art-caption">
-            SAMPLE PRODUCT · ILLUSTRATIVE IMAGE
-          </span>
+          {product.isSample && (
+            <span className="art-caption">
+              SAMPLE PRODUCT · ILLUSTRATIVE IMAGE
+            </span>
+          )}
         </div>
         <div className="detail-content">
-          <p className="eyebrow">THE EVERYDAY EDIT / SAMPLE CATALOGUE</p>
+          <p className="eyebrow">
+            THE EVERYDAY EDIT {product.isSample ? "/ SAMPLE CATALOGUE" : ""}
+          </p>
           <h1>{product.name}</h1>
           <p className="detail-price">
             {money(product.discountedPrice)}{" "}
             <del>{money(product.originalPrice)}</del>
           </p>
           <p className="detail-description">{product.description}</p>
+          <p className="small muted">
+            Need help choosing?{" "}
+            <Link href="/style-guide#measurements" className="text-link">
+              Read the fit guide
+            </Link>{" "}
+            or check our{" "}
+            <Link href="/help" className="text-link">
+              ordering FAQ
+            </Link>
+            .
+          </p>
           <fieldset>
             <legend>
               COLOR <span>{color}</span>

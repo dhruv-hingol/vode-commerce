@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
 import ShopShell from "@/components/shop-shell";
+import { isPreview, siteDescription, siteUrl } from "@/lib/seo";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "VODE | Everyday essentials",
-  description:
-    "Explore VODE, build your bag, and place your order with our team on WhatsApp.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "VODE | Shirts, T-Shirts & Unisex Clothing",
+    template: "%s | VODE",
+  },
+  description: siteDescription,
+  applicationName: "VODE",
+  robots: { index: !isPreview, follow: true },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION?.trim() || undefined,
+  },
 };
 export default function RootLayout({
   children,
@@ -13,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en-IN">
       <body>
         <ShopShell>{children}</ShopShell>
       </body>

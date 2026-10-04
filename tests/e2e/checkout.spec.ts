@@ -20,7 +20,7 @@ test("catalogue to WhatsApp: variants, persistence, validation, retained cart an
   await page.goto("/");
   await page.getByRole("link", { name: /The Everyday Tee/ }).click();
   await page.getByRole("button", { name: "ADD TO CART" }).click();
-  await expect(page.getByRole("alert")).toContainText("Choose your size");
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("Choose your size");
   await page.getByRole("button", { name: "M", exact: true }).click();
   await page.getByRole("button", { name: "ADD TO CART" }).click();
   const drawer = page.getByRole("dialog");
@@ -70,7 +70,7 @@ test("catalogue to WhatsApp: variants, persistence, validation, retained cart an
   await expect(drawer.getByRole("combobox")).toHaveValue("L");
   await page.screenshot({
     path: testInfo.outputPath("cart.png"),
-    fullPage: true,
+    animations: "disabled",
   });
   await drawer.getByRole("link", { name: /PROCEED TO CHECKOUT/ }).click();
   await expect(page).toHaveURL(/checkout/);
@@ -129,6 +129,7 @@ test("catalogue to WhatsApp: variants, persistence, validation, retained cart an
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBe(true);
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
   await page.screenshot({
     path: testInfo.outputPath("checkout.png"),
     fullPage: true,

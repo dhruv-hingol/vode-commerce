@@ -3,21 +3,31 @@ import Link from "next/link";
 import { products } from "@/lib/products";
 import { money } from "@/lib/cart";
 
+import StructuredData from "@/components/structured-data";
+import { homeStructuredData, pageMetadata, siteDescription } from "@/lib/seo";
+
+export const metadata = pageMetadata(
+  "Shirts, T-Shirts & Unisex Clothing",
+  siteDescription,
+  "/",
+);
+
 export default function Home() {
   return (
     <main>
+      <StructuredData data={homeStructuredData} />
       <section className="hero page-wrap">
         <div>
           <p className="eyebrow">VODE / THE EVERYDAY EDIT</p>
           <h1>
-            Good pieces.
+            Shirts &amp; tees.
             <br />
             <span>Your way.</span>
           </h1>
           <p className="hero-copy">
-            A considered wardrobe starts with the everyday.
+            Everyday clothing for men, women and unisex styling.
             <br />
-            Find the pieces that feel like you.
+            Find your fit. Choose your color. Order on WhatsApp.
           </p>
           <a href="#collection" className="button primary hero-button">
             EXPLORE THE COLLECTION <span>↘</span>
@@ -41,13 +51,15 @@ export default function Home() {
         <div className="section-heading">
           <div>
             <p className="eyebrow">BUILD YOUR EVERYDAY</p>
-            <h2>The collection</h2>
+            <h2>Shirts, T-shirts &amp; hoodies</h2>
           </div>
           <span className="muted small">03 CONSIDERED ESSENTIALS</span>
         </div>
-        <p className="sample-notice">
-          Preview catalogue — sample products, prices and illustrations.
-        </p>
+        {products.some((product) => product.isSample) && (
+          <p className="sample-notice">
+            Preview catalogue — sample products, prices and illustrations.
+          </p>
+        )}
         <div className="product-grid">
           {products.map((product, index) => (
             <Link
@@ -59,7 +71,7 @@ export default function Home() {
                 <span className="product-index">0{index + 1}</span>
                 <Image
                   src={product.image}
-                  alt={product.name + " illustration"}
+                  alt={product.name + (product.isSample ? " illustration" : "")}
                   width={450}
                   height={520}
                 />
@@ -99,6 +111,24 @@ export default function Home() {
             <h3>Say hello on WhatsApp</h3>
             <p>Send your order. We’ll handle the rest with you.</p>
           </div>
+        </div>
+      </section>
+      <section className="discovery-section page-wrap">
+        <p className="eyebrow">CLOTHING THAT FITS YOUR EVERYDAY</p>
+        <h2>Shirts, T-shirts &amp; unisex styling.</h2>
+        <p>
+          Explore everyday clothing for men and women with a focus on the fit
+          you enjoy. Start with shirts and tees, compare sizes and colors, and
+          talk to VODE about your selection before confirming your WhatsApp
+          order.
+        </p>
+        <div className="discovery-links">
+          <Link href="/style-guide" className="text-link">
+            Read the clothing &amp; fit guide →
+          </Link>
+          <Link href="/help" className="text-link">
+            Sizing, delivery &amp; ordering answers →
+          </Link>
         </div>
       </section>
     </main>

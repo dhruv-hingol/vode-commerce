@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import BrandLogo from "./brand-logo";
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useCartStore } from "@/store/useCartStore";
@@ -48,8 +49,8 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
         CONSIDERED ESSENTIALS. EVERYDAY EXPRESSION.
       </div>
       <header className="site-header">
-        <Link href="/" className="wordmark" aria-label="VODE home">
-          VODE<span>®</span>
+        <Link href="/" aria-label="VODE home">
+          <BrandLogo priority />
         </Link>
         <nav aria-label="Main navigation">
           <Link href="/#collection">The collection</Link>
@@ -74,10 +75,14 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
       )}
       {children}
       <footer className="site-footer">
-        <Link href="/" className="wordmark">
-          VODE<span>®</span>
+        <Link href="/" aria-label="VODE home">
+          <BrandLogo />
         </Link>
         <p>Less noise. More you.</p>
+        <nav aria-label="Helpful links" className="footer-links">
+          <Link href="/style-guide">Clothing &amp; fit guide</Link>
+          <Link href="/help">Help &amp; FAQs</Link>
+        </nav>
         <span>Catalogue & WhatsApp ordering</span>
       </footer>
       <dialog

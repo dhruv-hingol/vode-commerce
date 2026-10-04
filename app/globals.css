@@ -1070,3 +1070,152 @@ legend span {
     transition: none !important;
   }
 }
+
+/* Searchable editorial content, kept in the same visual language as the shop. */
+.discovery-section {
+  padding-top: 46px;
+  padding-bottom: 52px;
+  border-top: 1px solid var(--line);
+}
+.discovery-section h2 {
+  font-size: clamp(27px, 3vw, 38px);
+  letter-spacing: -0.04em;
+  line-height: 1.2;
+}
+.discovery-section > p {
+  max-width: 740px;
+  margin: 18px 0;
+  color: var(--muted);
+}
+.discovery-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 30px;
+  margin-top: 25px;
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  font-size: 12px;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}
+.editorial-page {
+  max-width: 1000px;
+  padding-bottom: 70px;
+}
+.editorial-page h1 {
+  font-size: clamp(38px, 5vw, 64px);
+  letter-spacing: -0.045em;
+  line-height: 1.1;
+  margin: 12px 0 26px;
+}
+.editorial-intro {
+  font-size: 17px;
+  line-height: 1.85;
+  color: var(--muted);
+  max-width: 760px;
+  margin-bottom: 32px;
+}
+.editorial-page section {
+  padding: 30px 0;
+  border-top: 1px solid var(--line);
+  scroll-margin-top: 110px;
+}
+.editorial-page h2 {
+  font-size: 25px;
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+.editorial-page section p {
+  color: #5c6257;
+  line-height: 1.85;
+  margin: 13px 0;
+}
+.guide-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 26px;
+  font-size: 13px;
+  margin-bottom: 36px;
+}
+.guide-navigation a,
+.editorial-callout p a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.editorial-steps {
+  list-style: decimal;
+  padding-left: 22px;
+  color: #5c6257;
+}
+.editorial-steps li {
+  margin: 12px 0;
+  padding-left: 6px;
+}
+.editorial-callout {
+  margin-top: 30px;
+  padding: 30px;
+  background: #e9ece1;
+}
+.editorial-callout .button {
+  margin-top: 22px;
+  max-width: 350px;
+}
+@media (max-width: 700px) {
+  .hero h1 {
+    font-size: 56px;
+  }
+  .editorial-intro {
+    font-size: 15px;
+  }
+  .editorial-page h2 {
+    font-size: 22px;
+  }
+  .editorial-callout {
+    padding: 23px;
+  }
+  .footer-links {
+    width: 100%;
+  }
+}
+
+/* Frame the original 500px logo's transparent margins without altering its artwork. */
+.brand-logo {
+  display: block;
+  position: relative;
+  width: 64px;
+  height: 68px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.brand-logo img {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  max-width: none;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.site-footer .brand-logo {
+  width: 82px;
+  height: 86px;
+}
+.site-footer .brand-logo img {
+  width: 238px;
+  height: 238px;
+}
+@media (max-width: 700px) {
+  .site-header .brand-logo {
+    width: 52px;
+    height: 56px;
+  }
+  .site-header .brand-logo img {
+    width: 156px;
+    height: 156px;
+  }
+}

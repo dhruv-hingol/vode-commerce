@@ -1,5 +1,7 @@
 export type Product = {
   id: string;
+  category: string;
+  isSample: boolean;
   name: string;
   description: string;
   image: string;
@@ -13,6 +15,8 @@ export type Product = {
 export const products: Product[] = [
   {
     id: "everyday-tee",
+    category: "T-shirts",
+    isSample: true,
     name: "The Everyday Tee",
     description:
       "A relaxed silhouette for your everyday rotation. Clean lines, an easy fit, and room to make it your own.",
@@ -24,6 +28,8 @@ export const products: Product[] = [
   },
   {
     id: "studio-shirt",
+    category: "Shirts",
+    isSample: true,
     name: "The Studio Shirt",
     description:
       "An understated layer with an effortless shape. Wear it open, buttoned up, or entirely your way.",
@@ -35,6 +41,8 @@ export const products: Product[] = [
   },
   {
     id: "off-duty-hoodie",
+    category: "Hoodies",
+    isSample: true,
     name: "The Off-Duty Hoodie",
     description:
       "A generous fit with a pared-back finish. Made for slow mornings and everything that follows.",
