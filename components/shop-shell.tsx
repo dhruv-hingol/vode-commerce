@@ -74,17 +74,6 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
         </p>
       )}
       {children}
-      <footer className="site-footer">
-        <Link href="/" aria-label="VODE home">
-          <BrandLogo />
-        </Link>
-        <p>Less noise. More you.</p>
-        <nav aria-label="Helpful links" className="footer-links">
-          <Link href="/style-guide">Clothing &amp; fit guide</Link>
-          <Link href="/help">Help &amp; FAQs</Link>
-        </nav>
-        <span>Catalogue & WhatsApp ordering</span>
-      </footer>
       <dialog
         ref={dialog}
         className="cart-drawer"

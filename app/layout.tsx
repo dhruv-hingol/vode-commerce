@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ShopShell from "@/components/shop-shell";
+import SiteFooter from "@/components/site-footer";
 import { isPreview, siteDescription, siteUrl } from "@/lib/seo";
 import "./globals.css";
 
@@ -23,8 +24,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en-IN">
-      <body>
-        <ShopShell>{children}</ShopShell>
+      <body id="top">
+        <ShopShell>
+          {children}
+          <SiteFooter />
+        </ShopShell>
       </body>
     </html>
   );

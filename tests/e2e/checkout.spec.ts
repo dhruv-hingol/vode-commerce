@@ -18,7 +18,7 @@ test("catalogue to WhatsApp: variants, persistence, validation, retained cart an
     };
   });
   await page.goto("/");
-  await page.getByRole("link", { name: /The Everyday Tee/ }).click();
+  await page.getByRole("main").getByRole("link", { name: /The Everyday Tee/ }).click();
   await page.getByRole("button", { name: "ADD TO CART" }).click();
   await expect(page.getByRole("main").getByRole("alert")).toContainText("Choose your size");
   await page.getByRole("button", { name: "M", exact: true }).click();
