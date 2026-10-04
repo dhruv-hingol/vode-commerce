@@ -1,69 +1,106 @@
 import Image from "next/image";
+import Link from "next/link";
+import { products } from "@/lib/products";
+import { money } from "@/lib/cart";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <main>
+      <section className="hero page-wrap">
+        <div>
+          <p className="eyebrow">VODE / THE EVERYDAY EDIT</p>
+          <h1>
+            Good pieces.
+            <br />
+            <span>Your way.</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="hero-copy">
+            A considered wardrobe starts with the everyday.
+            <br />
+            Find the pieces that feel like you.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
+          <a href="#collection" className="button primary hero-button">
+            EXPLORE THE COLLECTION <span>↘</span>
           </a>
         </div>
-      </main>
-    </div>
+        <div className="hero-art">
+          <span className="hero-art-label">LESS, BUT BETTER.</span>
+          <Image
+            src="/products/shirt.svg"
+            width={520}
+            height={590}
+            alt="Illustration of a sand-colored studio shirt"
+            priority
+          />
+          <span className="hero-art-bottom">
+            THE STUDIO SHIRT <span>01 / 03</span>
+          </span>
+        </div>
+      </section>
+      <section id="collection" className="collection page-wrap">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">BUILD YOUR EVERYDAY</p>
+            <h2>The collection</h2>
+          </div>
+          <span className="muted small">03 CONSIDERED ESSENTIALS</span>
+        </div>
+        <p className="sample-notice">
+          Preview catalogue — sample products, prices and illustrations.
+        </p>
+        <div className="product-grid">
+          {products.map((product, index) => (
+            <Link
+              className="product-card"
+              href={"/products/" + product.id}
+              key={product.id}
+            >
+              <div className="product-art">
+                <span className="product-index">0{index + 1}</span>
+                <Image
+                  src={product.image}
+                  alt={product.name + " illustration"}
+                  width={450}
+                  height={520}
+                />
+                <span className="product-arrow">↗</span>
+              </div>
+              <div className="product-card-info">
+                <h3>{product.name}</h3>
+                <span>
+                  {money(product.discountedPrice)}{" "}
+                  <del>{money(product.originalPrice)}</del>
+                </span>
+              </div>
+              <p className="muted small">
+                {product.colors.join(" / ")} · {product.sizes[0]}–
+                {product.sizes.at(-1)}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
+      <section className="how-it-works page-wrap">
+        <p className="eyebrow">FROM YOUR BAG TO YOUR DOOR</p>
+        <h2>A more personal checkout.</h2>
+        <div className="steps">
+          <div>
+            <span>01</span>
+            <h3>Make it yours</h3>
+            <p>Choose your pieces, size and color.</p>
+          </div>
+          <div>
+            <span>02</span>
+            <h3>Review your bag</h3>
+            <p>Add your delivery details at checkout.</p>
+          </div>
+          <div>
+            <span>03</span>
+            <h3>Say hello on WhatsApp</h3>
+            <p>Send your order. We’ll handle the rest with you.</p>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

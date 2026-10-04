@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VODE
 
-## Getting Started
+Next.js catalogue, persistent Zustand cart, and WhatsApp checkout. No payment gateway is used.
 
-First, run the development server:
+## Run
 
-```bash
+```sh
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_WHATSAPP_NUMBER` to the business number including country code, using digits only. Restart development after changing it. Production builds must have this variable set at build time; rebuild to change the number.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The local number uses India's +91 country code, assumed from the rupee pricing and pincode fields. Local environment files are ignored by Git.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Catalogue
 
-## Learn More
+The starter catalogue in `lib/products.ts` contains **sample products and prices**, with local illustrations in `public/products`. Replace these with approved VODE catalogue data and photography before launch. Sizes and colors come from this catalogue. Persisted items are validated against it and prices refreshed during hydration.
 
-To learn more about Next.js, take a look at the following resources:
+## Ordering
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Product page → choose size/color → add to bag → checkout.
+- Same product/size/color merges quantities, including size edits in the bag.
+- Quantity range is 1–999 per variation; use Remove to delete an item.
+- The cart is stored under `vode-cart` with Zustand persistence. Hydration runs after mount to keep server and initial client markup consistent.
+- Indian delivery fields are validated before a WhatsApp message opens in a new tab. Email, second address line, landmark, and notes are optional.
+- The checkout includes a fallback WhatsApp link. Opening it does not send the message or confirm the order; the customer must send it.
+- Cart contents remain until manually removed or cleared. Customer delivery details stay in component memory and are not persisted.
+- The product total excludes delivery charges; VODE confirms availability, delivery, and payment arrangements manually.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Checks
 
-## Deploy on Vercel
+```sh
+npm run lint
+npm run build
+npm test
+npm run test:e2e
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Unit tests cover cart mutations, persistence recovery, input validation, totals, and message encoding. Browser tests use installed Microsoft Edge in headless mode, test desktop and mobile sizes, and intercept WhatsApp URLs so no order is sent. Set `PLAYWRIGHT_CHANNEL=chromium` to use Playwright's downloaded Chromium instead.
