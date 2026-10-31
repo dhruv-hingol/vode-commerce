@@ -1,134 +1,160 @@
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "@/lib/products";
-import { money } from "@/lib/cart";
+import { ArrowDown, ArrowUpRight, MoveRight } from "lucide-react";
 
+import { brand } from "@/lib/config";
+
+import NewDrop from "@/components/new-drop";
+import HeroMedia from "@/components/hero-media";
+import Reveal from "@/components/reveal";
 import StructuredData from "@/components/structured-data";
-import { homeStructuredData, pageMetadata, siteDescription } from "@/lib/seo";
+import { homeStructuredData, pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata(
-  "Shirts, T-Shirts & Unisex Clothing",
-  siteDescription,
+  "Pure Cotton Embroidered Shirts India",
+  brand.description,
   "/",
 );
-
 export default function Home() {
   return (
-    <main>
+    <main id="main-content">
       <StructuredData data={homeStructuredData} />
-      <section className="hero page-wrap">
-        <div>
-          <p className="eyebrow">VODE / THE EVERYDAY EDIT</p>
-          <h1>
-            Shirts &amp; tees.
-            <br />
-            <span>Your way.</span>
-          </h1>
-          <p className="hero-copy">
-            Everyday clothing for men, women and unisex styling.
-            <br />
-            Find your fit. Choose your color. Order on WhatsApp.
-          </p>
-          <a href="#collection" className="button primary hero-button">
-            EXPLORE THE COLLECTION <span>↘</span>
-          </a>
+      <section className="campaign-hero">
+        <HeroMedia />
+        <div className="hero-shade" />
+        <div className="hero-topline">
+          <span>VODE — THE FIRST CHAPTER</span>
+          <span>CONTEMPORARY BY NATURE</span>
         </div>
-        <div className="hero-art">
-          <span className="hero-art-label">LESS, BUT BETTER.</span>
-          <Image
-            src="/products/shirt.svg"
-            width={520}
-            height={590}
-            alt="Illustration of a sand-colored studio shirt"
-            priority
-          />
-          <span className="hero-art-bottom">
-            THE STUDIO SHIRT <span>01 / 03</span>
+        <div className="campaign-copy">
+          <p className="eyebrow">A NEW EXPRESSION OF STYLE</p>
+          <h1>
+            New Autumn
+            <br />
+            <em>Collection.</em>
+          </h1>
+          <p className="campaign-description">
+            Precision in every stitch.
+            <br />
+            Confidence in every detail.
+          </p>
+          <div className="hero-actions">
+            <Link href="/shop" className="button light">
+              SHOP NOW <ArrowUpRight size={17} />
+            </Link>
+            <Link href="/about" className="hero-story">
+              DISCOVER VODE <MoveRight size={18} />
+            </Link>
+          </div>
+        </div>
+        <div className="hero-bottom">
+          <a href="#new-drop">
+            SCROLL TO DISCOVER <ArrowDown size={14} />
+          </a>
+          <span>
+            01 <i /> THE NEW PERSPECTIVE
           </span>
+          <span>DESIGNED TO STAND APART.</span>
+        </div>
+        <span className="hero-sideword" aria-hidden="true">
+          VODE
+        </span>
+      </section>
+      <div className="brand-strip">
+        <span>THOUGHTFUL DETAILS</span>
+        <span className="strip-star">✳</span>
+        <span>MODERN SILHOUETTES</span>
+        <span className="strip-star">✳</span>
+        <span>EFFORTLESS CONFIDENCE</span>
+        <span className="strip-star">✳</span>
+        <span>RULE THE STREET WITH VODE</span>
+      </div>
+      <NewDrop />
+
+      <section className="craft-section">
+        <div className="craft-copy">
+          <p className="eyebrow">THE BEAUTY IS IN THE DETAILS</p>
+          <h2>
+            Crafted in detail.
+            <br />
+            <em>Worn with confidence.</em>
+          </h2>
+          <p>
+            From the texture of a fabric to the placement of a stitch, our
+            vision begins with the things you feel. A considered approach to
+            clothing, with character in every detail.
+          </p>
+          <Link href="/about#craft" className="underlined-link">
+            THE VODE APPROACH <ArrowUpRight size={18} />
+          </Link>
+          <div className="craft-values">
+            <span>01 / CONSIDERED FABRICS</span>
+            <span>02 / EXPRESSIVE DETAIL</span>
+            <span>03 / EFFORTLESS FIT</span>
+          </div>
+        </div>
+        <div className="craft-image">
+          <Image
+            src="/images/drops/que-sera-02.jpg"
+            alt="VODE collar embroidery and fine pinstripes on the Que Sera pure cotton shirt"
+            fill
+            sizes="(max-width:700px) 100vw, 50vw"
+          />
         </div>
       </section>
-      <section id="collection" className="collection page-wrap">
+      <Reveal className="philosophy page-wrap">
+        <p className="eyebrow">THE VODE PHILOSOPHY</p>
+        <h2>
+          More than clothing.
+          <br />
+          <em>An expression of you.</em>
+        </h2>
+        <p>
+          Style doesn’t need to shout to make an impression. Thoughtful details,
+          modern silhouettes, and effortless confidence define our vision for
+          every collection.
+        </p>
+        <Link href="/about" className="underlined-link">
+          OUR STORY <ArrowUpRight size={17} />
+        </Link>
+        <span className="philosophy-mark">V.</span>
+      </Reveal>
+      <section className="community-section page-wrap">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">BUILD YOUR EVERYDAY</p>
-            <h2>Shirts, T-shirts &amp; hoodies</h2>
+            <p className="eyebrow">ON THE STREET. IN YOUR ELEMENT.</p>
+            <h2>The VODE edit.</h2>
           </div>
-          <span className="muted small">03 CONSIDERED ESSENTIALS</span>
+          <a
+            href={brand.instagram}
+            target="_blank"
+            rel="noreferrer"
+            className="underlined-link"
+          >
+            {brand.instagramHandle} <ArrowUpRight size={18} />
+          </a>
         </div>
-        {products.some((product) => product.isSample) && (
-          <p className="sample-notice">
-            Preview catalogue — sample products, prices and illustrations.
-          </p>
-        )}
-        <div className="product-grid">
-          {products.map((product, index) => (
-            <Link
-              className="product-card"
-              href={"/products/" + product.id}
-              key={product.id}
+        <div className="community-grid">
+          {brand.community.map((item, index) => (
+            <a
+              href={brand.instagram}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={`Follow VODE on Instagram: ${item.alt}`}
+              key={item.image}
             >
-              <div className="product-art">
-                <span className="product-index">0{index + 1}</span>
-                <Image
-                  src={product.image}
-                  alt={product.name + (product.isSample ? " illustration" : "")}
-                  width={450}
-                  height={520}
-                />
-                <span className="product-arrow">↗</span>
-              </div>
-              <div className="product-card-info">
-                <h3>{product.name}</h3>
-                <span>
-                  {money(product.discountedPrice)}{" "}
-                  <del>{money(product.originalPrice)}</del>
-                </span>
-              </div>
-              <p className="muted small">
-                {product.colors.join(" / ")} · {product.sizes[0]}–
-                {product.sizes.at(-1)}
-              </p>
-            </Link>
+              <Image
+                src={item.image}
+                alt={item.alt}
+                fill
+                sizes="(max-width:700px) 45vw, 24vw"
+              />
+              <span>
+                THE VODE EDIT / 0{index + 1}
+                <ArrowUpRight size={16} />
+              </span>
+            </a>
           ))}
-        </div>
-      </section>
-      <section className="how-it-works page-wrap">
-        <p className="eyebrow">FROM YOUR BAG TO YOUR DOOR</p>
-        <h2>A more personal checkout.</h2>
-        <div className="steps">
-          <div>
-            <span>01</span>
-            <h3>Make it yours</h3>
-            <p>Choose your pieces, size and color.</p>
-          </div>
-          <div>
-            <span>02</span>
-            <h3>Review your bag</h3>
-            <p>Add your delivery details at checkout.</p>
-          </div>
-          <div>
-            <span>03</span>
-            <h3>Say hello on WhatsApp</h3>
-            <p>Send your order. We’ll handle the rest with you.</p>
-          </div>
-        </div>
-      </section>
-      <section className="discovery-section page-wrap">
-        <p className="eyebrow">CLOTHING THAT FITS YOUR EVERYDAY</p>
-        <h2>Shirts, T-shirts &amp; unisex styling.</h2>
-        <p>
-          Explore everyday clothing for men and women with a focus on the fit
-          you enjoy. Start with shirts and tees, compare sizes and colors, and
-          talk to VODE about your selection before confirming your WhatsApp
-          order.
-        </p>
-        <div className="discovery-links">
-          <Link href="/style-guide" className="text-link">
-            Read the clothing &amp; fit guide →
-          </Link>
-          <Link href="/help" className="text-link">
-            Sizing, delivery &amp; ordering answers →
-          </Link>
         </div>
       </section>
     </main>

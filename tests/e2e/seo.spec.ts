@@ -10,7 +10,7 @@ test("SEO content and metadata are readable without JavaScript", async ({
   const page = await context.newPage();
   try {
     await page.goto("/");
-    await expect(page).toHaveTitle(/Shirts, T-Shirts & Unisex Clothing.*VODE/);
+    await expect(page).toHaveTitle(/Pure Cotton Embroidered Shirts.*VODE/);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
       /^https:\/\/vode-style\.vercel\.app\/?$/,
@@ -57,7 +57,7 @@ test("SEO content and metadata are readable without JavaScript", async ({
       "content",
       /index, follow/,
     );
-    for (const path of ["/checkout", "/products/everyday-tee"]) {
+    for (const path of ["/checkout", "/products/11-11-cotton-shirt"]) {
       await page.goto(path);
       await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
         "content",
@@ -85,7 +85,7 @@ test("robots, sitemap, social preview and brand icon are served", async ({
   expect(sitemap.ok()).toBeTruthy();
   expect(await sitemap.text()).toContain("https://vode-style.vercel.app/help");
   expect(await sitemap.text()).not.toContain("/checkout");
-  expect(await sitemap.text()).not.toContain("/products/everyday-tee");
+  expect(await sitemap.text()).not.toContain("/products/11-11-cotton-shirt");
   const preview = await request.get("/opengraph-image");
   expect(preview.ok()).toBeTruthy();
   expect(preview.headers()["content-type"]).toContain("image/png");

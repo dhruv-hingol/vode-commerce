@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
-export const alt = "VODE — Shirts, T-shirts and everyday clothing";
+export const alt = "VODE — Pure cotton embroidered shirts";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export default async function OpenGraphImage() {
@@ -53,7 +53,7 @@ export default async function OpenGraphImage() {
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
         <span style={{ fontSize: 78, letterSpacing: "-3px" }}>
-          Shirts. T-shirts. Your way.
+          Pure cotton. Your signature.
         </span>
         <span style={{ fontSize: 28, marginTop: 22, color: "#59634f" }}>
           For men, women &amp; unisex styling.

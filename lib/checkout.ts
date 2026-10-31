@@ -1,4 +1,5 @@
 import { cartTotals, money, type CartItem } from "./cart";
+import { customerSchema } from "./customer-schema";
 
 export type Customer = {
   fullName: string;
@@ -14,42 +15,21 @@ export type Customer = {
 };
 export type CustomerErrors = Partial<Record<keyof Customer, string>>;
 export function validateCustomer(customer: Customer): CustomerErrors {
+  const result = customerSchema.safeParse(customer);
   const errors: CustomerErrors = {};
-  const required: (keyof Customer)[] = [
-    "fullName",
-    "phone",
-    "address",
-    "city",
-    "state",
-    "pincode",
-  ];
-  for (const field of required)
-    if (!customer[field].trim()) errors[field] = "This field is required.";
-  if (customer.fullName.trim() && customer.fullName.trim().length < 2)
-    errors.fullName = "Enter your full name.";
-  if (
-    customer.phone.trim() &&
-    !/^(?:\+?91[\s-]?)?[6-9]\d{9}$/.test(
-      customer.phone.trim().replace(/[\s()-]/g, ""),
-    )
-  )
-    errors.phone =
-      "Enter a valid 10-digit Indian mobile number, optionally with +91.";
-  if (
-    customer.email.trim() &&
-    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email.trim())
-  )
-    errors.email = "Enter a valid email address.";
-  if (customer.pincode.trim() && !/^[1-9]\d{5}$/.test(customer.pincode.trim()))
-    errors.pincode = "Enter a valid 6-digit Indian pincode.";
-  for (const field of Object.keys(customer) as (keyof Customer)[]) {
-    if (customer[field].length > (field === "notes" ? 1000 : 250))
-      errors[field] = "Please shorten this field.";
-  }
+  if (!result.success)
+    for (const issue of result.error.issues) {
+      const field = issue.path[0] as keyof Customer;
+      errors[field] ??= issue.message;
+    }
   return errors;
 }
 
-export function buildOrderMessage(customer: Customer, items: CartItem[]) {
+export function buildOrderMessage(
+  customer: Customer,
+  items: CartItem[],
+  reference = "VODE-DRAFT",
+) {
   const clean = Object.fromEntries(
     Object.entries(customer).map(([key, value]) => [key, value.trim()]),
   ) as Customer;
@@ -58,6 +38,7 @@ export function buildOrderMessage(customer: Customer, items: CartItem[]) {
     "Hello VODE,",
     "",
     "I would like to place an order.",
+    "Order reference: " + reference,
     "",
     "Customer Details",
     "Name: " + clean.fullName,
@@ -85,6 +66,7 @@ export function buildOrderMessage(customer: Customer, items: CartItem[]) {
     "Order Summary",
     "Subtotal: " + money(totals.subtotal),
     "Discount: " + money(totals.discount),
+    "Shipping: To be confirmed on WhatsApp (not included)",
     "Final Total: " + money(totals.total),
     "",
     "Additional Notes:",
@@ -97,6 +79,7 @@ export function buildWhatsAppUrl(
   number: string | undefined,
   customer: Customer,
   items: CartItem[],
+  reference?: string,
 ) {
   const normalized = (number ?? "").replace(/[\s()+-]/g, "");
   if (!/^[1-9]\d{7,14}$/.test(normalized))
@@ -111,6 +94,6 @@ export function buildWhatsAppUrl(
     "https://wa.me/" +
     normalized +
     "?text=" +
-    encodeURIComponent(buildOrderMessage(customer, items))
+    encodeURIComponent(buildOrderMessage(customer, items, reference))
   );
 }

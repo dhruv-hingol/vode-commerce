@@ -19,7 +19,7 @@ export async function generateMetadata({
     product.name + " — " + product.category,
     product.description +
       (product.isSample
-        ? " Preview product; details and prices are illustrative."
+        ? " Original VODE photography. Preview pricing and sizes; final details confirmed at launch."
         : " Select your size and color and order from VODE on WhatsApp."),
     "/products/" + product.id,
     product.isSample,

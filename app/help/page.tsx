@@ -18,7 +18,7 @@ export default function HelpPage() {
     ? "https://wa.me/" + number
     : undefined;
   return (
-    <main className="page-wrap editorial-page">
+    <main id="main-content" className="page-wrap editorial-page">
       <StructuredData data={breadcrumbs("Help & FAQs", "/help")} />
       <StructuredData
         data={{

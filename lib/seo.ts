@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import type { Product } from "./products";
+import { brand } from "./config";
 
-export const siteUrl = "https://vode-style.vercel.app";
-export const siteName = "VODE";
-export const siteDescription =
-  "Explore VODE shirts, T-shirts and everyday clothing for men, women and unisex styling. Choose your size and color, then order with our team on WhatsApp.";
+export const siteUrl = brand.url;
+export const siteName = brand.name;
+export const siteDescription = brand.description;
 export const isPreview = process.env.VERCEL_ENV === "preview";
 export const absoluteUrl = (path = "/") => new URL(path, siteUrl).toString();
 
@@ -42,7 +42,7 @@ export function pageMetadata(
           url: absoluteUrl("/opengraph-image"),
           width: 1200,
           height: 630,
-          alt: "VODE — shirts, T-shirts and everyday clothing",
+          alt: "VODE — pure cotton embroidered shirts",
         },
       ],
     },
@@ -62,6 +62,7 @@ export const organization = {
   url: absoluteUrl(),
   logo: { "@type": "ImageObject", url: absoluteUrl("/vode-logo.png") },
   description: siteDescription,
+  sameAs: [brand.instagram],
 };
 
 export const homeStructuredData = {
@@ -81,7 +82,7 @@ export const homeStructuredData = {
       "@type": "WebPage",
       "@id": absoluteUrl("/#webpage"),
       url: absoluteUrl(),
-      name: "VODE | Shirts, T-Shirts & Unisex Clothing",
+      name: "VODE | Pure Cotton Embroidered Shirts",
       description: siteDescription,
       isPartOf: { "@id": absoluteUrl("/#website") },
       about: { "@id": organization["@id"] },

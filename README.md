@@ -1,87 +1,79 @@
-# VODE
+﻿# VODE
 
-Next.js catalogue, persistent Zustand cart, and WhatsApp checkout. No payment gateway is used.
+A responsive Next.js App Router storefront built with React, TypeScript, Tailwind CSS, locally hosted Cormorant Garamond and Manrope fonts, Motion, Lucide icons and Zustand. Black, white and neutral greys throughout.
 
-## Run
+## Start
 
 ```sh
 npm install
 npm run dev
 ```
 
-Copy `.env.example` to `.env.local` and set `NEXT_PUBLIC_WHATSAPP_NUMBER` to the business number including country code, using digits only. Restart development after changing it. Production builds must have this variable set at build time; rebuild to change the number.
+On PowerShell installations that block npm.ps1, use `npm.cmd` instead. Copy `.env.example` to `.env.local` and configure the business WhatsApp number. Never commit `.env.local`. Public environment changes require a server restart or production rebuild.
 
-The local number uses India's +91 country code, assumed from the rupee pricing and pincode fields. Local environment files are ignored by Git.
+## Application structure
 
-## Catalogue
+- `components/app.tsx`: complete shared App component, navigation and footer.
+- `app/layout.tsx`: root document, locally hosted fonts and global metadata.
+- `app/page.tsx`: Autumn campaign, the Cotton Signature Drop and brand story.
+- `components/shop-shell.tsx`: fixed header, search, wishlist badge, mobile menu and accessible bag dialog.
+- `components/catalogue.tsx`: collapsible sidebar with size, colour, price, availability and sorting in shareable URL parameters.
+- `components/product-card.tsx`: product cards, hover image/zoom, wishlist and size-aware Add to Cart quick view.
+- `components/product-detail.tsx`: image gallery, fullscreen viewer, size guide, quantities and mobile purchase bar.
+- `components/checkout.tsx`: React Hook Form and Zod validation, WhatsApp order preparation.
+- `lib/config.ts`: brand details, campaign assets, social/contact links and collection content.
+- `lib/products.ts`: the only two listed products and their structured data.
+- `components/hero-media.tsx`: original campaign film, silently looping without play/pause controls; a matching poster is used for reduced motion or playback failures.
+- `components/footer-signature.tsx` / `components/vode-scene.tsx`: a compact, button-free Three.js VODE wordmark. It rotates only while clicking and dragging (or dragging with a finger), then holds the chosen angle on release. Hovering has no effect. Arrow keys provide equivalent interaction; Home resets the angle. Rendering runs only when needed and stops offscreen. A static wordmark remains available if WebGL is unsupported.
 
-The starter catalogue in `lib/products.ts` contains **sample products and prices**, with local illustrations in `public/products`. Replace these with approved VODE catalogue data and photography before launch. Sizes and colors come from this catalogue. Persisted items are validated against it and prices refreshed during hydration.
+The catalogue uses one column below 768px, three from 768px and four from 1280px. Opening filters adds a left sidebar on desktop and an inline collapsible panel on mobile. The homepage's two-shirt editorial layout uses two wide photographs on desktop and one column on mobile.
 
-## Ordering
+## The Cotton Signature Drop
 
-- Product page → choose size/color → add to bag → checkout.
-- Same product/size/color merges quantities, including size edits in the bag.
-- Quantity range is 1–999 per variation; use Remove to delete an item.
-- The cart is stored under `vode-cart` with Zustand persistence. Hydration runs after mount to keep server and initial client markup consistent.
-- Indian delivery fields are validated before a WhatsApp message opens in a new tab. Email, second address line, landmark, and notes are optional.
-- The checkout includes a fallback WhatsApp link. Opening it does not send the message or confirm the order; the customer must send it.
-- Cart contents remain until manually removed or cleared. Customer delivery details stay in component memory and are not persisted.
-- The product total excludes delivery charges; VODE confirms availability, delivery, and payment arrangements manually.
+Only these shirts are listed:
 
-## Checks
+1. **The 11:11 Cotton Shirt**: photos IMG_9079 and IMG_9084; black pinstripes, red 11:11 and Make a wish embroidery, VODE collar embroidery.
+2. **The Que Sera Cotton Shirt**: photos IMG_9112 and IMG_9092; white pinstripes, red Que Sera Sera script and VODE collar embroidery.
+
+Both use the brand-supplied pure cotton description. Optimized copies are in `public/images/drops`; source files were not modified. Images display in their natural colours. Only the interface uses black, white and neutral greys. Each shirt's secondary photograph stays paired with that shirt for hover and gallery views.
+
+**Launch values still need confirmation:** the listed prices, compare-at prices, sizes and per-variant inventory remain preview values. `isSample: true` prevents them from producing merchant offers, being indexed as products, or entering the product sitemap. Set it to false only after replacing the preview commercial data with approved values. No ratings or sales claims are invented.
+
+Removed placeholder products are discarded from restored carts, wishlists and recently viewed lists. Women, Accessories and New Drop were removed from the primary navigation; Men remains. The new-arrivals route still holds the requested Cotton Signature Drop and is accessible from its editorial section.
+
+## Ordering and integrations
+
+- Cart and wishlist persist in browser local storage. Cart prices and variants are checked against the current catalogue on restore.
+- The bag supports quantity, size and colour changes, stock limits, removal and clearing.
+- Checkout validates Indian mobile and PIN code formats. Delivery details remain in memory, not local storage.
+- An order message includes customer/address details, selected variations, quantities, prices, discounts, product total, shipping status and a generated order reference.
+- WhatsApp opening never confirms payment or clears the bag. The customer must review/send the message and agree final availability, delivery charges and payment with VODE.
+- No card or UPI credentials are collected. Shipping charges are confirmed with the team and are explicitly excluded from the product total.
+- Contact enquiries open WhatsApp or the configured email app. Instagram is the fallback if neither is configured.
+- Newsletter requests use `NEXT_PUBLIC_NEWSLETTER_EMAIL` to open an email draft. When blank, the form explicitly says coming soon and directs visitors to Instagram. No email marketing integration is simulated.
+- Policy pages are clearly labelled pre-launch templates. Add approved business details and terms before launch.
+
+## Verification
+
+The supplied 4K film is served as an H.264 1440×810, 30fps MP4, reduced from about 29 MB to 2.5 MB. The original file in Downloads was preserved. To prepare a replacement with the same output filenames:
 
 ```sh
-npm run lint
-npm run build
-npm test
-npm run test:e2e
+npm exec --yes --package=ffmpeg-static -- node scripts/prepare-hero-video.mjs "PATH_TO_ORIGINAL_VIDEO.mp4"
 ```
 
-Unit tests cover cart mutations, persistence recovery, input validation, totals, and message encoding. Browser tests use installed Microsoft Edge in headless mode, test desktop and mobile sizes, and intercept WhatsApp URLs so no order is sent. Set `PLAYWRIGHT_CHANNEL=chromium` to use Playwright's downloaded Chromium instead.
+The encoder is a temporary asset-preparation tool; it is not bundled with the website. Replace the video and poster paths in `lib/config.ts` if filenames change. The Three.js typeface is served locally from `public/fonts` with its original font metadata.
 
-## SEO and Google Search Console
+```sh
+npm test
+npm run build
+npm run test:e2e
+node scripts/design-review.mjs
+```
 
-The canonical production URL is `https://vode-style.vercel.app`, defined once in `lib/seo.ts`. Update it if you later move to a custom domain; also verify the new property and plan redirects.
+Browser tests use the installed Microsoft Edge in headless mode, test desktop/mobile checkout and SEO, and intercept WhatsApp URLs so no message is sent. The design review checks page responses, headings, image loading and horizontal overflow, then saves screenshots under ignored `test-results/design`. It expects the development server at `http://localhost:3000`.
 
-Implemented:
+## Deployment
 
-- Unique page titles/descriptions, production canonical URLs, Open Graph and Twitter previews.
-- Branded favicon, SVG icon, and a generated 1200×630 social sharing image.
-- `/robots.txt` and `/sitemap.xml` generated by Next.js.
-- Organization and WebSite JSON-LD on the homepage, breadcrumbs on content/product pages, and FAQ data matching the visible answers.
-- Server-rendered `/style-guide` and `/help` pages with internal links.
-- Checkout is `noindex, follow` and absent from the sitemap. It stays crawlable so engines can read noindex.
-- Vercel preview deployments are noindex and disallow crawling. Production pages remain indexable.
+Deploy this repository to a Next.js-compatible host such as Vercel. Set the variables from `.env.example` in that host, use `npm run build`, and update `NEXT_PUBLIC_SITE_URL` to the production origin. Preview deployments are noindex. Sitemap, robots, canonical URLs, social metadata and breadcrumbs are generated by the app. Only approved products enter the product sitemap.
 
-### Register the deployed site
-
-1. Sign in to [Google Search Console](https://search.google.com/search-console).
-2. Add a **URL-prefix** property: `https://vode-style.vercel.app/`. Do not try to verify ownership of the parent `vercel.app` domain.
-3. Choose **HTML tag** verification. Copy only the value inside `content="..."`.
-4. In Vercel, open this project's Settings → Environment Variables. Add `GOOGLE_SITE_VERIFICATION` with that value for **Production**. You can also put it in `.env.local` for local testing. Do not paste the entire meta tag.
-5. Deploy these changes with that variable configured. Vercel environment changes require a new deployment; setting only `.env.local` does not configure Vercel.
-6. View the deployed homepage's source and check for `<meta name="google-site-verification" content="YOUR_VALUE">`, then click **Verify** in Search Console. Keep the token configured after verification.
-7. In **Sitemaps**, submit `https://vode-style.vercel.app/sitemap.xml`.
-8. Use **URL Inspection** for the homepage, `/style-guide`, and `/help`. Test the live URL and request indexing. Monitor Page indexing and Performance afterward.
-
-I cannot complete Google account ownership verification from the repository. A code change or sitemap does not itself register the property, submit it, or guarantee indexing.
-
-### Publish real catalogue data before product indexing
-
-Products still have `isSample: true` in `lib/products.ts`. Their pages deliberately use noindex, are excluded from the sitemap, and do not output Product/Offer JSON-LD. This avoids presenting invented product prices as real merchant data.
-
-For each approved item, replace sample descriptions, images, sizes, colors and prices with real information, then set `isSample: false`. On the next deployment it receives Product/Offer markup and a sitemap entry automatically. The sample labels also adapt. Confirm fabric composition, fit measurements, stock, delivery charges, and return/exchange terms with the business before publishing those claims. No reviews, stock guarantees or shipping policies are fabricated.
-
-### GEO / AEO
-
-The visible FAQ and fit guidance give search and answer engines concise, crawlable answers. JSON-LD describes the same content. No keyword stuffing, invisible answer text, fabricated ratings, or unsupported ranking claims are used. FAQ markup does not guarantee a Google FAQ rich result. Standard crawler access also applies to AI search crawlers that respect robots.txt.
-
-Useful checks after deploying:
-
-- [Google Rich Results Test](https://search.google.com/test/rich-results)
-- [Schema Markup Validator](https://validator.schema.org/)
-- [PageSpeed Insights](https://pagespeed.web.dev/)
-
-References: [Search Console verification](https://support.google.com/webmasters/answer/9008080), [Google AI search guidance](https://developers.google.com/search/docs/appearance/ai-features), [Product structured data](https://developers.google.com/search/docs/appearance/structured-data/product-snippet).
-
-Run `npm test` for SEO/cart unit tests and `npm run test:e2e` for desktop/mobile browser checks, including HTML metadata without JavaScript. Regenerate the checked-in brand icons with `node scripts/generate-brand-icons.mjs` (embeds the supplied PNG unchanged into an SVG icon).
+For Google Search Console, set `GOOGLE_SITE_VERIFICATION` to the HTML tag's content value and rebuild; submit `/sitemap.xml` after verifying ownership. Source changes do not themselves verify ownership or guarantee indexing. Check mobile/desktop performance on the deployed production URL before claiming Lighthouse results.

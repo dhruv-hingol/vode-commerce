@@ -34,7 +34,12 @@ beforeEach(async () => {
 });
 const cart = () => useCartStore.getState();
 const add = (size = "M", color = "Ink", quantity = 1) =>
-  cart().addToCart("everyday-tee", size, color, quantity);
+  cart().addToCart(
+    color === "Chalk" ? "que-sera-cotton-shirt" : "11-11-cotton-shirt",
+    size,
+    color,
+    quantity,
+  );
 const customer: Customer = {
   fullName: "Asha Shah",
   phone: "+91 9876543210",
@@ -60,15 +65,15 @@ test("same variation merges while sizes and colors remain separate", () => {
 test("quantity edits recalculate item and summary totals", () => {
   add();
   cart().updateQuantity(cartKey(cart().items[0]), 3);
-  assert.equal(cart().items[0].finalItemTotal, 2997);
+  assert.equal(cart().items[0].finalItemTotal, 4497);
   assert.deepEqual(cart().getCartTotal(), {
     quantity: 3,
-    subtotal: 4497,
+    subtotal: 5997,
     discount: 1500,
-    total: 2997,
+    total: 4497,
   });
   cart().updateQuantity(cartKey(cart().items[0]), 1);
-  assert.equal(cart().items[0].finalItemTotal, 999);
+  assert.equal(cart().items[0].finalItemTotal, 1499);
 });
 test("invalid quantities and invalid product variations cannot enter the cart", () => {
   add();
@@ -89,7 +94,7 @@ test("changing size merges a matching line without losing units", () => {
   assert.equal(cart().items.length, 1);
   assert.equal(cart().items[0].size, "L");
   assert.equal(cart().items[0].quantity, 5);
-  assert.equal(cart().items[0].finalItemTotal, 4995);
+  assert.equal(cart().items[0].finalItemTotal, 7495);
   cart().updateSize(cartKey(cart().items[0]), "invalid");
   assert.equal(cart().items[0].size, "L");
 });
@@ -130,10 +135,10 @@ test("hydration restores cart, validates variations and replaces tampered prices
   await useCartStore.persist.rehydrate();
   assert.equal(cart().hasHydrated, true);
   assert.equal(cart().items.length, 1);
-  assert.equal(cart().items[0].name, "The Everyday Tee");
+  assert.equal(cart().items[0].name, "The 11:11 Cotton Shirt");
   assert.equal(cart().items[0].quantity, 4);
-  assert.equal(cart().items[0].discountedPrice, 999);
-  assert.equal(cart().items[0].finalItemTotal, 3996);
+  assert.equal(cart().items[0].discountedPrice, 1499);
+  assert.equal(cart().items[0].finalItemTotal, 5996);
   assert.deepEqual(useCartStore.getInitialState().items, []);
 });
 test("corrupt storage recovers without blocking shopping", async () => {
@@ -212,15 +217,15 @@ test("WhatsApp encodes complete details and recalculated totals without clearing
     "Pincode: 380001",
     "Email: asha@example.com",
     "Landmark: Near the park",
-    "1. The Everyday Tee",
+    "1. The 11:11 Cotton Shirt",
     "Size: M",
     "Color: Ink",
     "Quantity: 2",
-    "Price: ₹999.00",
-    "Total: ₹1,998.00",
-    "Subtotal: ₹2,998.00",
+    "Price: ₹1,499.00",
+    "Total: ₹2,998.00",
+    "Subtotal: ₹3,998.00",
     "Discount: ₹1,000.00",
-    "Final Total: ₹1,998.00",
+    "Final Total: ₹2,998.00",
     customer.notes,
   ])
     assert.ok(message.includes(value), value);

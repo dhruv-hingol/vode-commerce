@@ -1,15 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { customerSchema } from "@/lib/customer-schema";
+import { brand } from "@/lib/config";
 import { useCartStore } from "@/store/useCartStore";
 import { cartTotals } from "@/lib/cart";
-import {
-  buildWhatsAppUrl,
-  validateCustomer,
-  type Customer,
-  type CustomerErrors,
-} from "@/lib/checkout";
+import { buildWhatsAppUrl, type Customer } from "@/lib/checkout";
 import { CartItems, OrderTotals } from "./cart-items";
 import { WhatsAppIcon } from "./icons";
 
@@ -93,14 +92,20 @@ const fields: {
   },
   { name: "landmark", label: "Landmark", placeholder: "A nearby place" },
 ];
-const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+const whatsappNumber = brand.whatsapp;
 
 export default function Checkout() {
   const items = useCartStore((state) => state.items);
   const ready = useCartStore((state) => state.hasHydrated);
   const clearCart = useCartStore((state) => state.clearCart);
-  const [customer, setCustomer] = useState<Customer>(initialCustomer);
-  const [errors, setErrors] = useState<CustomerErrors>({});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Customer>({
+    defaultValues: initialCustomer,
+    resolver: zodResolver(customerSchema, undefined, { mode: "sync" }),
+  });
   const [notice, setNotice] = useState("");
   const [preparedOrder, setPreparedOrder] = useState<{
     url: string;
@@ -110,26 +115,22 @@ export default function Checkout() {
     preparedOrder?.items === JSON.stringify(items) ? preparedOrder.url : "";
   const quantity = cartTotals(items).quantity;
 
-  function update(field: keyof Customer, value: string) {
-    setCustomer((current) => ({ ...current, [field]: value }));
-    setErrors((current) => ({ ...current, [field]: undefined }));
+  function invalidatePreparedOrder() {
     setPreparedOrder(null);
     setNotice("");
   }
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function submit(customer: Customer) {
     setNotice("");
     setPreparedOrder(null);
-    const nextErrors = validateCustomer(customer);
-    setErrors(nextErrors);
-    const firstError = Object.keys(nextErrors)[0];
-    if (firstError) {
-      document.getElementById(firstError)?.focus();
-      return;
-    }
     try {
       const currentItems = useCartStore.getState().items;
-      const url = buildWhatsAppUrl(whatsappNumber, customer, currentItems);
+      const reference = "VODE-" + crypto.randomUUID().slice(0, 8).toUpperCase();
+      const url = buildWhatsAppUrl(
+        whatsappNumber,
+        customer,
+        currentItems,
+        reference,
+      );
       // Open within the user gesture. Opening a message never clears the cart.
       window.open(url, "_blank", "noopener,noreferrer");
       setPreparedOrder({ url, items: JSON.stringify(currentItems) });
@@ -144,24 +145,27 @@ export default function Checkout() {
 
   if (!ready)
     return (
-      <main className="page-wrap checkout-page">
+      <main id="main-content" className="page-wrap checkout-page">
         <p role="status">Loading your bag…</p>
       </main>
     );
   if (!items.length)
     return (
-      <main className="page-wrap checkout-page empty-checkout">
+      <main
+        id="main-content"
+        className="page-wrap checkout-page empty-checkout"
+      >
         <p className="eyebrow">A FRESH START</p>
         <h1>Your bag is empty.</h1>
         <p>Explore the collection and find something that feels like you.</p>
-        <Link href="/#collection" className="button primary">
+        <Link href="/shop" className="button primary">
           CONTINUE SHOPPING ↗
         </Link>
       </main>
     );
   return (
-    <main className="page-wrap checkout-page">
-      <Link href="/#collection" className="back-link">
+    <main id="main-content" className="page-wrap checkout-page">
+      <Link href="/shop" className="back-link">
         ← Continue shopping
       </Link>
       <p className="eyebrow">ONE STEP CLOSER</p>
@@ -179,7 +183,11 @@ export default function Checkout() {
             Delivery within India. Your details are shared with VODE when you
             send the WhatsApp message.
           </p>
-          <form noValidate onSubmit={submit} className="checkout-form">
+          <form
+            noValidate
+            onSubmit={handleSubmit(submit)}
+            className="checkout-form"
+          >
             {fields.map((field) => (
               <div
                 className={"form-field " + (field.wide ? "wide" : "")}
@@ -195,11 +203,12 @@ export default function Checkout() {
                 </label>
                 <input
                   id={field.name}
-                  name={field.name}
+                  {...register(field.name, {
+                    onChange: invalidatePreparedOrder,
+                  })}
                   type={field.type ?? "text"}
                   autoComplete={field.autoComplete}
                   required={field.required}
-                  value={customer[field.name]}
                   placeholder={field.placeholder}
                   maxLength={250}
                   inputMode={field.name === "pincode" ? "numeric" : undefined}
@@ -207,11 +216,10 @@ export default function Checkout() {
                   aria-describedby={
                     errors[field.name] ? field.name + "-error" : undefined
                   }
-                  onChange={(event) => update(field.name, event.target.value)}
                 />
                 {errors[field.name] && (
                   <p className="field-error" id={field.name + "-error"}>
-                    {errors[field.name]}
+                    {errors[field.name]?.message}
                   </p>
                 )}
               </div>
@@ -222,18 +230,16 @@ export default function Checkout() {
               </label>
               <textarea
                 id="notes"
-                name="notes"
-                value={customer.notes}
+                {...register("notes", { onChange: invalidatePreparedOrder })}
                 rows={3}
                 maxLength={1000}
                 placeholder="Anything you’d like us to know?"
                 aria-invalid={Boolean(errors.notes)}
                 aria-describedby={errors.notes ? "notes-error" : undefined}
-                onChange={(event) => update("notes", event.target.value)}
               />
               {errors.notes && (
                 <p id="notes-error" className="field-error">
-                  {errors.notes}
+                  {errors.notes?.message}
                 </p>
               )}
             </div>

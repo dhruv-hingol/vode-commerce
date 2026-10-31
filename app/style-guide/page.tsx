@@ -10,7 +10,7 @@ export const metadata = pageMetadata(
 
 export default function StyleGuide() {
   return (
-    <main className="page-wrap editorial-page">
+    <main id="main-content" className="page-wrap editorial-page">
       <StructuredData
         data={breadcrumbs("Clothing & Fit Guide", "/style-guide")}
       />
@@ -57,13 +57,13 @@ export default function StyleGuide() {
           and sleeve length matter alongside the chest measurement.
         </p>
         <p>
-          For men&apos;s and women&apos;s styling alike, try a shirt with straight-leg
-          trousers for a simple outfit, or wear it open over a tee for a more
-          relaxed look. A longer hem gives you more room to tuck; check the
-          actual length rather than assuming it from a product photo.
+          For men&apos;s and women&apos;s styling alike, try a shirt with
+          straight-leg trousers for a simple outfit, or wear it open over a tee
+          for a more relaxed look. A longer hem gives you more room to tuck;
+          check the actual length rather than assuming it from a product photo.
         </p>
-        <Link href="/products/studio-shirt" className="text-link">
-          View the Studio Shirt details →
+        <Link href="/products/11-11-cotton-shirt" className="text-link">
+          View the 11:11 Cotton Shirt details →
         </Link>
       </section>
       <section id="t-shirts">
@@ -80,8 +80,8 @@ export default function StyleGuide() {
           the actual garment before choosing how to wash or dry it; those
           details are not interchangeable across all T-shirts.
         </p>
-        <Link href="/products/everyday-tee" className="text-link">
-          View the Everyday Tee details →
+        <Link href="/products/que-sera-cotton-shirt" className="text-link">
+          View the Que Sera Cotton Shirt details →
         </Link>
       </section>
       <section id="unisex-fit">
@@ -95,8 +95,9 @@ export default function StyleGuide() {
         <p>
           Choose the silhouette you prefer rather than treating a gender
           category as a size guide. If you want a relaxed look, describe that to
-          our team and ask for the garment&apos;s measurements. There is no universal
-          conversion between men&apos;s, women&apos;s and unisex letter sizes.
+          our team and ask for the garment&apos;s measurements. There is no
+          universal conversion between men&apos;s, women&apos;s and unisex
+          letter sizes.
         </p>
       </section>
       <section id="measurements">
@@ -110,8 +111,9 @@ export default function StyleGuide() {
             sleeve length and overall length.
           </li>
           <li>
-            Ask whether the product&apos;s size chart uses flat garment widths, full
-            circumferences or body measurements, then compare like with like.
+            Ask whether the product&apos;s size chart uses flat garment widths,
+            full circumferences or body measurements, then compare like with
+            like.
           </li>
           <li>
             Tell VODE your preferred fit and ask about any measurement that is
@@ -131,7 +133,7 @@ export default function StyleGuide() {
           <Link href="/help">ordering and delivery FAQ</Link> explains what
           happens next.
         </p>
-        <Link href="/#collection" className="button primary">
+        <Link href="/shop" className="button primary">
           EXPLORE VODE CLOTHING ↗
         </Link>
       </div>

@@ -1,65 +1,68 @@
 import Link from "next/link";
-import BrandLogo from "./brand-logo";
-import { WhatsAppIcon } from "./icons";
-import { products } from "@/lib/products";
+import { ArrowUp, ArrowUpRight } from "lucide-react";
+import { brand } from "@/lib/config";
+import Newsletter from "./newsletter";
+import FooterSignature from "./footer-signature";
 
 export default function SiteFooter() {
-  const number = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "").replace(
-    /[\s()+-]/g,
-    "",
-  );
-  const contactUrl = /^[1-9]\d{7,14}$/.test(number)
-    ? `https://wa.me/${number}?text=${encodeURIComponent("Hi VODE, I'd like some help choosing my fit.")}`
-    : undefined;
-
   return (
     <footer className="site-footer">
-      <div className="footer-invitation">
-        <div>
-          <p className="eyebrow">GOOD STYLE STARTS WITH A CONVERSATION</p>
-          <h2>Find your fit. Say hello.</h2>
-          <p>Questions about sizing, colors or ordering? Let’s talk.</p>
-        </div>
-        {contactUrl ? (
-          <a className="button footer-contact" href={contactUrl} target="_blank" rel="noopener noreferrer" aria-label="Chat with VODE on WhatsApp (opens in a new tab)">
-            <WhatsAppIcon /> CHAT WITH VODE <span aria-hidden="true">↗</span>
-          </a>
-        ) : (
-          <Link className="button footer-contact" href="/help">
-            EXPLORE HELP &amp; FAQs <span aria-hidden="true">↗</span>
-          </Link>
-        )}
-      </div>
-      <div className="footer-grid">
+      <div className="footer-grid grid gap-10 md:grid-cols-2 xl:grid-cols-4">
         <div className="footer-brand">
-          <Link href="/" aria-label="VODE home"><BrandLogo /></Link>
-          <p className="footer-tagline">Less noise. More you.</p>
-          <p>Everyday pieces. Your own expression.<br />Explore the VODE edit and make it yours.</p>
+          <Link className="vode-wordmark" href="/" aria-label="VODE home">
+            VODE<span>®</span>
+          </Link>
+          <p>
+            Pure cotton. Expressive embroidery.
+            <br />
+            An expression entirely your own.
+          </p>
+          <p className="footer-motto">RULE THE STREET WITH VODE</p>
+          <nav
+            className="footer-company-links"
+            aria-label="Company information"
+          >
+            <Link href="/about">Our story</Link>
+            <Link href="/contact">Contact</Link>
+          </nav>
         </div>
-        <nav className="footer-nav" aria-label="Footer collection">
-          <h3>THE COLLECTION</h3>
-          <Link href="/#collection">Explore all pieces</Link>
-          {products.map((product) => (
-            <Link key={product.id} href={`/products/${product.id}`}>{product.name}</Link>
-          ))}
+        <nav className="footer-nav" aria-label="Customer service">
+          <h3>CUSTOMER SERVICE</h3>
+          <Link href="/style-guide">Size & fit guide</Link>
+          <Link href="/help">Help & FAQs</Link>
+          <Link href="/policies/shipping">Shipping</Link>
+          <Link href="/policies/returns">Returns & exchanges</Link>
+          <Link href="/wishlist">Your wishlist</Link>
         </nav>
-        <nav className="footer-nav" aria-label="Helpful links">
-          <h3>A LITTLE GUIDANCE</h3>
-          <Link href="/style-guide">Clothing &amp; fit guide</Link>
-          <Link href="/help">Help &amp; FAQs</Link>
-          <Link href="/checkout">Review your bag</Link>
+        <nav
+          className="footer-nav footer-social"
+          aria-label="Social and collection links"
+        >
+          <h3>FOLLOW THE STORY</h3>
+          <a href={brand.instagram} target="_blank" rel="noreferrer">
+            Instagram ↗
+          </a>
+          <Link href="/collections/new-arrivals">
+            The Cotton Signature Drop
+          </Link>
+          <Link href="/shop">Shop the collection</Link>
+          {brand.email && <a href={`mailto:${brand.email}`}>Email us ↗</a>}
+          <Link href="/contact" className="underlined-link">
+            LET’S TALK <ArrowUpRight size={15} />
+          </Link>
         </nav>
-        <div className="footer-ordering">
-          <h3>A MORE PERSONAL ORDER</h3>
-          <p>Choose your pieces, add them to your bag and send your order on WhatsApp.</p>
-          <p>We’ll confirm availability, delivery charges and payment details with you.</p>
-        </div>
+        <Newsletter compact />
       </div>
       <div className="footer-bottom">
-        <span>© VODE. Less noise. More you.</span>
-        <span>Catalogue &amp; WhatsApp ordering</span>
-        <a href="#top">Back to top <span aria-hidden="true">↑</span></a>
+        <span>© {new Date().getUTCFullYear()} VODE. ALL RIGHTS RESERVED.</span>
+        <span>INDIA / INR ₹</span>
+        <Link href="/policies/privacy">Privacy</Link>
+        <Link href="/policies/terms">Terms</Link>
+        <a href="#top">
+          BACK TO TOP <ArrowUp size={13} />
+        </a>
       </div>
+      <FooterSignature />
     </footer>
   );
 }

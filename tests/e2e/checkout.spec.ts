@@ -18,11 +18,16 @@ test("catalogue to WhatsApp: variants, persistence, validation, retained cart an
     };
   });
   await page.goto("/");
-  await page.getByRole("main").getByRole("link", { name: /The Everyday Tee/ }).click();
-  await page.getByRole("button", { name: "ADD TO CART" }).click();
-  await expect(page.getByRole("main").getByRole("alert")).toContainText("Choose your size");
+  await page
+    .locator(".product-name")
+    .filter({ hasText: "The 11:11 Cotton Shirt" })
+    .click();
+  await page.locator(".product-add").click();
+  await expect(page.getByRole("main").getByRole("alert")).toContainText(
+    "Choose your size",
+  );
   await page.getByRole("button", { name: "M", exact: true }).click();
-  await page.getByRole("button", { name: "ADD TO CART" }).click();
+  await page.locator(".product-add").click();
   const drawer = page.getByRole("dialog");
   await expect(drawer).toBeVisible();
   await expect(drawer.locator(".cart-item")).toHaveCount(1);
@@ -31,28 +36,32 @@ test("catalogue to WhatsApp: variants, persistence, validation, retained cart an
   ).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(drawer).not.toBeVisible();
-  await expect(page.getByRole("button", { name: "ADD TO CART" })).toBeFocused();
+  await expect(page.locator(".product-add")).toBeFocused();
 
-  await page.getByRole("button", { name: "ADD TO CART" }).click();
+  await page.locator(".product-add").click();
   await expect(drawer.locator(".quantity-control span")).toHaveText("2");
   await drawer.getByRole("button", { name: /Increase quantity/ }).click();
   await expect(drawer.locator(".quantity-control span")).toHaveText("3");
   await drawer.getByRole("button", { name: /Decrease quantity/ }).click();
-  await drawer.getByRole("combobox").selectOption("L");
+  await drawer.getByRole("combobox", { name: /^Size for/ }).selectOption("L");
   await drawer.getByRole("button", { name: "Close cart" }).click();
-  await page.getByRole("button", { name: "ADD TO CART" }).click();
-  await expect(drawer.locator(".cart-item")).toHaveCount(2);
-  await drawer.getByRole("combobox").last().selectOption("L");
-  await expect(drawer.locator(".cart-item")).toHaveCount(1);
-  await expect(drawer.locator(".quantity-control span")).toHaveText("3");
-  await expect(drawer.locator(".final-total")).toContainText("₹2,997.00");
-
-  await drawer.getByRole("button", { name: "Close cart" }).click();
-  await page.getByRole("button", { name: "Chalk", exact: true }).click();
-  await page.getByRole("button", { name: "ADD TO CART" }).click();
+  await page.locator(".product-add").click();
   await expect(drawer.locator(".cart-item")).toHaveCount(2);
   await drawer
-    .getByRole("button", { name: "Remove The Everyday Tee, M, Chalk" })
+    .getByRole("combobox", { name: /^Size for/ })
+    .last()
+    .selectOption("L");
+  await expect(drawer.locator(".cart-item")).toHaveCount(1);
+  await expect(drawer.locator(".quantity-control span")).toHaveText("3");
+  await expect(drawer.locator(".final-total")).toContainText("₹4,497.00");
+
+  await drawer.getByRole("button", { name: "Close cart" }).click();
+  await page.goto("/products/que-sera-cotton-shirt");
+  await page.getByRole("button", { name: "M", exact: true }).click();
+  await page.locator(".product-add").click();
+  await expect(drawer.locator(".cart-item")).toHaveCount(2);
+  await drawer
+    .getByRole("button", { name: "Remove The Que Sera Cotton Shirt, M, Chalk" })
     .click();
   await expect(drawer.locator(".cart-item")).toHaveCount(1);
   await page.reload();
@@ -67,7 +76,9 @@ test("catalogue to WhatsApp: variants, persistence, validation, retained cart an
   await reopened.close();
 
   await page.getByRole("button", { name: "Open cart, 3 items" }).click();
-  await expect(drawer.getByRole("combobox")).toHaveValue("L");
+  await expect(drawer.getByRole("combobox", { name: /^Size for/ })).toHaveValue(
+    "L",
+  );
   await page.screenshot({
     path: testInfo.outputPath("cart.png"),
     animations: "disabled",
@@ -79,7 +90,7 @@ test("catalogue to WhatsApp: variants, persistence, validation, retained cart an
   await expect(page.getByLabel("Full name")).toBeFocused();
   await page.getByLabel("Full name").fill("Asha Shah");
   await page.getByLabel("Phone number").fill("123");
-  await page.getByLabel("Email address").fill("wrong-email");
+  await page.getByRole("main").getByLabel("Email address").fill("wrong-email");
   await page.getByLabel("Address *", { exact: true }).fill("12 River Road");
   await page.getByLabel("Address line 2").fill("Flat 4");
   await page.getByLabel("City").fill("Ahmedabad");
@@ -88,7 +99,7 @@ test("catalogue to WhatsApp: variants, persistence, validation, retained cart an
   await page.getByRole("button", { name: /ORDER ON WHATSAPP/ }).click();
   await expect(page.locator("input[aria-invalid='true']")).toHaveCount(3);
   await page.getByLabel("Phone number").fill("9876543210");
-  await page.getByLabel("Email address").fill("asha@example.com");
+  await page.getByRole("main").getByLabel("Email address").fill("asha@example.com");
   await page.getByLabel("Pincode").fill("380001");
   await page.getByLabel("Landmark").fill("Near the park");
   await page
@@ -111,7 +122,7 @@ test("catalogue to WhatsApp: variants, persistence, validation, retained cart an
     "Size: L",
     "Color: Ink",
     "Quantity: 3",
-    "Final Total: ₹2,997.00",
+    "Final Total: ₹4,497.00",
     "Call first & ring once. नमस्ते",
   ])
     expect(message).toContain(value);
@@ -162,12 +173,12 @@ test("corrupt persisted cart recovers and still allows shopping", async ({
   await page.addInitScript(() =>
     localStorage.setItem("vode-cart", "{bad-json"),
   );
-  await page.goto("/products/studio-shirt");
+  await page.goto("/products/11-11-cotton-shirt");
   await expect(page.getByRole("status")).toContainText(
     "could not save or restore",
   );
   await page.getByRole("button", { name: "M", exact: true }).click();
-  await page.getByRole("button", { name: "ADD TO CART" }).click();
+  await page.locator(".product-add").click();
   await expect(page.getByRole("dialog").locator(".cart-item")).toHaveCount(1);
 });
 
@@ -181,12 +192,12 @@ test("blocked persistence keeps cart usable for the current visit", async ({
       },
     });
   });
-  await page.goto("/products/everyday-tee");
+  await page.goto("/products/11-11-cotton-shirt");
   await expect(page.getByRole("status")).toContainText(
     "could not save or restore",
   );
   await page.getByRole("button", { name: "S", exact: true }).click();
-  await page.getByRole("button", { name: "ADD TO CART" }).click();
+  await page.locator(".product-add").click();
   await expect(page.getByRole("dialog").locator(".cart-item")).toHaveCount(1);
   await page
     .getByRole("dialog")

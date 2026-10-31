@@ -2,7 +2,7 @@ export const faqs = [
   {
     question: "What is VODE?",
     answer:
-      "VODE is a clothing brand focused on shirts, T-shirts and everyday dressing for men, women and unisex styling. Browse the catalogue and use WhatsApp to discuss your selection with our team. The current preview catalogue is clearly marked with sample products and illustrative prices.",
+      "VODE is a clothing brand focused on pure cotton shirts with expressive embroidery. The Cotton Signature Drop features the black 11:11 shirt and white Que Sera shirt in original VODE photography. Prices, sizes and availability are preview details until confirmed by our team.",
   },
   {
     question: "How do I order clothing from VODE?",

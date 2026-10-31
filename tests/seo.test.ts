@@ -17,7 +17,10 @@ test("each page gets its own production canonical and share URL", () => {
     "https://vode-style.vercel.app/style-guide",
   );
   assert.equal(metadata.openGraph?.url, absoluteUrl("/style-guide"));
-  assert.equal((metadata.twitter && "card" in metadata.twitter && metadata.twitter.card), "summary_large_image");
+  assert.equal(
+    metadata.twitter && "card" in metadata.twitter && metadata.twitter.card,
+    "summary_large_image",
+  );
 });
 test("checkout and sample product metadata explicitly prohibit indexing", () => {
   const metadata = pageMetadata("Checkout", "Review", "/checkout", true);
@@ -38,6 +41,12 @@ test("sitemap excludes checkout and samples and automatically includes approved 
     absoluteUrl("/"),
     absoluteUrl("/style-guide"),
     absoluteUrl("/help"),
+    absoluteUrl("/shop"),
+    absoluteUrl("/about"),
+    absoluteUrl("/contact"),
+    absoluteUrl("/collections/shirts"),
+    absoluteUrl("/collections/new-arrivals"),
+    absoluteUrl("/collections/men"),
   ]);
   const product = products[0];
   const sample = product.isSample;

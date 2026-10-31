@@ -14,7 +14,7 @@ import {
   withQuantity,
   type CartItem,
 } from "@/lib/cart";
-import { findProduct } from "@/lib/products";
+import { findProduct, variantStock } from "@/lib/products";
 
 type CartState = {
   items: CartItem[];
@@ -32,6 +32,7 @@ type CartState = {
   removeFromCart: (key: string) => void;
   updateQuantity: (key: string, quantity: number) => void;
   updateSize: (key: string, size: string) => void;
+  updateColor: (key: string, color: string) => void;
   clearCart: () => void;
   getCartTotal: () => ReturnType<typeof cartTotals>;
 };
@@ -49,24 +50,37 @@ function restoreItems(value: unknown): CartItem[] {
       raw.quantity < 1
     )
       return items;
-    return mergeItem(
-      items,
-      withQuantity(
-        {
-          productId: product.id,
-          name: product.name,
-          image: product.image,
-          size: raw.size,
-          color: raw.color,
-          originalPrice: product.originalPrice,
-          discountedPrice: product.discountedPrice,
-          quantity: 1,
-          finalItemTotal: 0,
-        },
-        Math.min(raw.quantity, MAX_QUANTITY),
+    if (!variantStock(product, raw.size, raw.color)) return items;
+    return limitToStock(
+      mergeItem(
+        items,
+        withQuantity(
+          {
+            productId: product.id,
+            name: product.name,
+            image: product.image,
+            size: raw.size,
+            color: raw.color,
+            originalPrice: product.originalPrice,
+            discountedPrice: product.discountedPrice,
+            quantity: 1,
+            finalItemTotal: 0,
+          },
+          Math.min(raw.quantity, MAX_QUANTITY),
+        ),
       ),
     );
   }, []);
+}
+
+function limitToStock(items: CartItem[]): CartItem[] {
+  return items.flatMap((item) => {
+    const product = findProduct(item.productId);
+    const stock = product ? variantStock(product, item.size, item.color) : 0;
+    return stock > 0
+      ? [withQuantity(item, Math.min(item.quantity, stock))]
+      : [];
+  });
 }
 
 function reportStorageError() {
@@ -116,6 +130,7 @@ export const useCartStore = create<CartState>()(
           !product ||
           !product.sizes.includes(size) ||
           !product.colors.includes(color) ||
+          variantStock(product, size, color) < 1 ||
           !Number.isSafeInteger(quantity) ||
           quantity < 1
         )
@@ -134,14 +149,22 @@ export const useCartStore = create<CartState>()(
           },
           Math.min(quantity, MAX_QUANTITY),
         );
-        set((state) => ({ items: mergeItem(state.items, item), isOpen: true }));
+        set((state) => ({
+          items: limitToStock(mergeItem(state.items, item)),
+          isOpen: true,
+        }));
       },
       removeFromCart: (key) =>
         set((state) => ({
           items: state.items.filter((item) => cartKey(item) !== key),
         })),
       updateQuantity: (key, quantity) => {
+        const item = get().items.find((entry) => cartKey(entry) === key);
+        const product = item && findProduct(item.productId);
         if (
+          !item ||
+          !product ||
+          quantity > variantStock(product, item.size, item.color) ||
           !Number.isSafeInteger(quantity) ||
           quantity < 1 ||
           quantity > MAX_QUANTITY
@@ -158,13 +181,30 @@ export const useCartStore = create<CartState>()(
         if (
           !item ||
           item.size === size ||
-          !findProduct(item.productId)?.sizes.includes(size)
+          !findProduct(item.productId)?.sizes.includes(size) ||
+          !variantStock(findProduct(item.productId)!, size, item.color)
         )
           return;
         set((state) => ({
-          items: mergeItem(
-            state.items.filter((entry) => cartKey(entry) !== key),
-            { ...item, size },
+          items: limitToStock(
+            mergeItem(
+              state.items.filter((entry) => cartKey(entry) !== key),
+              { ...item, size },
+            ),
+          ),
+        }));
+      },
+      updateColor: (key, color) => {
+        const item = get().items.find((entry) => cartKey(entry) === key);
+        const product = item && findProduct(item.productId);
+        if (!item || !product || !variantStock(product, item.size, color))
+          return;
+        set((state) => ({
+          items: limitToStock(
+            mergeItem(
+              state.items.filter((entry) => cartKey(entry) !== key),
+              { ...item, color },
+            ),
           ),
         }));
       },

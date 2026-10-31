@@ -9,13 +9,14 @@ import {
   money,
   type CartItem,
 } from "@/lib/cart";
-import { findProduct } from "@/lib/products";
+import { findProduct, variantStock } from "@/lib/products";
 import { useCartStore } from "@/store/useCartStore";
 
 export function CartItems() {
   const items = useCartStore((state) => state.items);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const updateSize = useCartStore((state) => state.updateSize);
+  const updateColor = useCartStore((state) => state.updateColor);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const closeCart = useCartStore((state) => state.closeCart);
   return (
@@ -53,7 +54,18 @@ export function CartItems() {
                   Remove
                 </button>
               </div>
-              <p className="muted small">Color: {item.color}</p>
+              <label className="size-select">
+                Color{" "}
+                <select
+                  aria-label={"Color for " + item.name + ", " + item.size}
+                  value={item.color}
+                  onChange={(event) => updateColor(key, event.target.value)}
+                >
+                  {findProduct(item.productId)?.colors.map((color) => (
+                    <option key={color}>{color}</option>
+                  ))}
+                </select>
+              </label>
               <label className="size-select">
                 Size{" "}
                 <select
@@ -78,7 +90,17 @@ export function CartItems() {
                   <span aria-label="Quantity">{item.quantity}</span>
                   <button
                     aria-label={"Increase quantity of " + item.name}
-                    disabled={item.quantity >= MAX_QUANTITY}
+                    disabled={
+                      item.quantity >=
+                      Math.min(
+                        MAX_QUANTITY,
+                        variantStock(
+                          findProduct(item.productId)!,
+                          item.size,
+                          item.color,
+                        ),
+                      )
+                    }
                     onClick={() => updateQuantity(key, item.quantity + 1)}
                   >
                     +
