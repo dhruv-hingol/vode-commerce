@@ -393,11 +393,10 @@ export default function ProductDetail({ product }: { product: Product }) {
           className="size-guide-modal"
           onClose={() => setSizeGuide(false)}
         >
-          <p className="eyebrow">FIND YOUR FIT</p>
-          <h2>A little room to be you.</h2>
+          <h2>Find your fit</h2>
           <p>
-            Illustrative body measurements in inches. These are guidance only;
-            ask our team for approved garment measurements before ordering.
+            Body measurements in inches, for guidance. Contact our team for
+            approved garment measurements before ordering.
           </p>
           <table>
             <thead>
@@ -405,14 +404,15 @@ export default function ProductDetail({ product }: { product: Product }) {
                 <th>Size</th>
                 <th>Chest</th>
                 <th>Waist</th>
+                <th>Length</th>
               </tr>
             </thead>
             <tbody>
               {[
-                ["S", "36–38", "28–30"],
-                ["M", "38–40", "30–32"],
-                ["L", "40–42", "32–34"],
-                ["XL", "42–44", "34–36"],
+                ["S", "36–38", "28–30", "26.50"],
+                ["M", "38–40", "30–32", "26.75"],
+                ["L", "40–42", "32–34", "27"],
+                ["XL", "42–44", "34–36", "27.25"],
               ].map((row) => (
                 <tr key={row[0]}>
                   {row.map((v, i) =>

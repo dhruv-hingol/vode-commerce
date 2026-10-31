@@ -4895,8 +4895,12 @@ body {
   cursor: grab;
   touch-action: none;
 }
-.footer-signature .signature-stage.is-dragging { cursor: grabbing; }
-.footer-signature .signature-stage canvas { touch-action: none !important; }
+.footer-signature .signature-stage.is-dragging {
+  cursor: grabbing;
+}
+.footer-signature .signature-stage canvas {
+  touch-action: none !important;
+}
 .footer-signature .footer-static-signature {
   font-size: 64px;
   letter-spacing: 0.12em;

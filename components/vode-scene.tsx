@@ -3,22 +3,25 @@
 import { Suspense, useEffect, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Center, Text3D } from "@react-three/drei";
-import { MathUtils, type Group } from "three";
+import { MathUtils, type Group, type Mesh } from "three";
 
 type SceneProps = {
   visible: boolean;
   rotation: { x: number; y: number };
   immediate: boolean;
   onReady: () => void;
+  onFailure: () => void;
+  dragging: boolean;
 };
 function Signature({
   rotation,
   immediate,
   onReady,
-}: Omit<SceneProps, "visible">) {
-  const viewportWidth = useThree((state) => state.viewport.width);
+}: Pick<SceneProps, "rotation" | "immediate" | "onReady">) {
+  const viewport = useThree((state) => state.viewport);
   const invalidate = useThree((state) => state.invalidate);
   const group = useRef<Group>(null);
+  const text = useRef<Mesh>(null);
   useEffect(() => {
     onReady();
   }, [onReady]);
@@ -43,45 +46,61 @@ function Signature({
       current.x = rotation.x;
       current.y = rotation.y;
     }
+    // One scale for every angle; the taller transparent canvas provides room to turn.
+    const geometry = text.current?.geometry;
+    if (geometry) {
+      if (!geometry.boundingSphere) geometry.computeBoundingSphere();
+      const diameter = (geometry.boundingSphere?.radius || 1) * 2;
+      group.current.scale.setScalar(Math.min(1, viewport.width * 0.9 / diameter, viewport.height * 0.9 / diameter));
+    }
   });
   return (
-    <group ref={group} scale={Math.min(1, viewportWidth / 7.6)}>
+    <group ref={group}>
       <Center>
         <Text3D
-          font="/fonts/optimer-regular.typeface.json"
+          ref={text}
+          font="/fonts/optimer-bold.typeface.json"
           size={1.7}
-          height={0.2}
+          height={0.35}
           bevelEnabled
-          bevelThickness={0.025}
-          bevelSize={0.018}
+          bevelThickness={0.045}
+          bevelSize={0.03}
           bevelSegments={3}
           curveSegments={10}
           letterSpacing={0.09}
         >
-          <meshStandardMaterial
-            color="#eeeeee"
-            metalness={0.35}
-            roughness={0.27}
-          />
+          <meshBasicMaterial color="#000000" toneMapped={false} />
           VODE
         </Text3D>
       </Center>
     </group>
   );
 }
-export default function VodeScene({ visible, ...props }: SceneProps) {
+function ContextRecovery({ onFailure }: { onFailure: () => void }) {
+  const canvas = useThree(state => state.gl.domElement);
+  useEffect(() => {
+    function lost(event: Event) {
+      event.preventDefault();
+      onFailure();
+    }
+    canvas.addEventListener("webglcontextlost", lost);
+    return () => canvas.removeEventListener("webglcontextlost", lost);
+  }, [canvas, onFailure]);
+  return null;
+}
+
+export default function VodeScene({ visible, dragging, onFailure, ...props }: SceneProps) {
   return (
     <Canvas
       dpr={[1, 1.5]}
-      frameloop={visible ? "demand" : "never"}
-      camera={{ position: [0, 0, 4.6], fov: 35 }}
+      frameloop={dragging ? "always" : visible ? "demand" : "never"}
+      orthographic
+      camera={{ position: [0, 0, 12], zoom: 32, near: 0.1, far: 100 }}
       gl={{ antialias: true, alpha: true, powerPreference: "low-power" }}
       fallback={<span className="footer-static-signature">VODE</span>}
       aria-hidden="true"
     >
-      <ambientLight intensity={1.5} />
-      <directionalLight position={[3, 5, 6]} intensity={3.5} />
-      <directionalLight position={[-5, -2, 3]} intensity={1.2} />
+      <ContextRecovery onFailure={onFailure} />
       <Suspense fallback={null}>
         <Signature {...props} />
       </Suspense>

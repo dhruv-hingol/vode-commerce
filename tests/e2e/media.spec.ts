@@ -78,6 +78,28 @@ test("campaign loops without controls and footer rotates only while dragging", a
   expect(errors).toEqual([]);
 });
 
+test("footer has no background and completes full rotations on both axes", async ({ page }) => {
+  await page.goto("/");
+  const signature = page.getByRole("region", { name: "Interactive VODE signature" });
+  await signature.scrollIntoViewIfNeeded();
+  const stage = signature.locator(".signature-stage");
+  await expect(stage).toHaveAttribute("tabindex", "0", { timeout: 30000 });
+  await expect(signature).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(signature.locator(".footer-static-signature").first()).toHaveCSS("color", "rgb(0, 0, 0)");
+  await expect(signature.locator(".footer-static-signature.is-hidden")).toHaveCSS("opacity", "0");
+  await stage.focus();
+  const canvas = signature.locator("canvas");
+  const original = await canvas.screenshot();
+  for (let i = 0; i < 6; i++) await page.keyboard.press("ArrowRight");
+  await expect.poll(async () => Buffer.compare(original, await canvas.screenshot())).not.toBe(0);
+  for (let i = 0; i < 18; i++) await page.keyboard.press("ArrowRight");
+  await expect.poll(async () => Buffer.compare(original, await canvas.screenshot())).toBe(0);
+  for (let i = 0; i < 6; i++) await page.keyboard.press("ArrowDown");
+  await expect.poll(async () => Buffer.compare(original, await canvas.screenshot())).not.toBe(0);
+  for (let i = 0; i < 18; i++) await page.keyboard.press("ArrowDown");
+  await expect.poll(async () => Buffer.compare(original, await canvas.screenshot())).toBe(0);
+});
+
 test("reduced motion keeps the hero poster still without controls", async ({
   page,
 }) => {
