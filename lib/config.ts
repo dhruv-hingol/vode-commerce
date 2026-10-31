@@ -50,6 +50,14 @@ export const brand = {
 };
 export const collections = [
   {
+    slug: "t-shirts",
+    name: "T-shirts",
+    title: "The T-shirt edit.",
+    description: "Our T-shirts are currently sold out.",
+    productIds: [],
+    soldOut: true,
+  },
+  {
     slug: "shirts",
     name: "Embroidered shirts",
     title: "The art of standing apart.",

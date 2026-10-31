@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import App from "@/components/app";
 import { isPreview, siteDescription, siteUrl } from "@/lib/seo";
 import "./globals.css";
-import "@fontsource/cormorant-garamond/400.css";
-import "@fontsource/cormorant-garamond/400-italic.css";
-import "@fontsource/cormorant-garamond/500.css";
+import "./header.css";
+import "./storefront.css";
 import "@fontsource/manrope/400.css";
 import "@fontsource/manrope/500.css";
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/inter/700.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { brand } from "@/lib/config";
@@ -12,13 +11,6 @@ export default function About() {
   return (
     <main id="main-content">
       <section className="story-banner">
-        <Image
-          src={brand.campaign.image}
-          alt={brand.campaign.alt}
-          fill
-          sizes="100vw"
-          preload
-        />
         <div>
           <p className="eyebrow">
             INDEPENDENT IN SPIRIT. CONSIDERED BY DESIGN.

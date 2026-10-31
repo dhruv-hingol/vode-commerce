@@ -3,9 +3,10 @@ import { expect, test } from "@playwright/test";
 test("two original shirts, simplified navigation and shareable filters", async ({ page }, testInfo) => {
   await page.goto("/shop");
   await expect(page.locator(".product-card")).toHaveCount(2);
-  await expect(page.locator(".desktop-nav a")).toHaveCount(1);
-  await expect(page.locator(".desktop-nav a")).toHaveText("Men");
-  expect(await page.locator(".product-grid").evaluate(grid => getComputedStyle(grid).gridTemplateColumns.split(" ").length)).toBe(testInfo.project.name === "mobile" ? 1 : 4);
+  await expect(page.locator(".desktop-nav a")).toHaveCount(2);
+  await expect(page.locator(".desktop-nav a")).toHaveText(["Men", "T-shirtsSold out"]);
+  await page.locator(".product-grid").scrollIntoViewIfNeeded();
+  expect(await page.locator(".product-grid").evaluate(grid => getComputedStyle(grid).gridTemplateColumns.split(" ").length)).toBe(testInfo.project.name === "mobile" ? 2 : 4);
   await page.getByRole("button", { name: /FILTER & SORT/ }).click();
   await expect(page.getByRole("complementary", { name: "Filter products" })).toBeVisible();
   await page.getByRole("button", { name: "Chalk", exact: true }).click();

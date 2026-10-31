@@ -6,8 +6,8 @@
   --line: #dbdbdb;
   --sand: #ededed;
   --accent: #868686;
-  --serif: "Cormorant Garamond", Georgia, serif;
-  --sans: "Manrope", Arial, sans-serif;
+  --heading: "Manrope", Arial, sans-serif;
+  --sans: "Inter", Arial, sans-serif;
 }
 @theme inline {
   --color-background: var(--paper);
@@ -94,11 +94,12 @@ p {
 h1,
 h2,
 h3 {
+  font-family: var(--heading);
   font-weight: 400;
 }
 h1,
 h2 {
-  font-family: var(--serif);
+  font-family: var(--heading);
   line-height: 1.05;
   letter-spacing: -0.035em;
 }
@@ -106,7 +107,7 @@ h2 {
   font-size: clamp(38px, 4.3vw, 64px);
 }
 em {
-  font-family: var(--serif);
+  font-family: var(--heading);
   font-weight: 400;
 }
 del {
@@ -225,7 +226,7 @@ legend span {
   width: 100%;
 }
 .vode-wordmark {
-  font-family: var(--serif);
+  font-family: var(--heading);
   font-size: 46px;
   line-height: 1;
   font-weight: 500;
@@ -491,7 +492,7 @@ legend span {
   right: 24px;
   bottom: 60px;
   writing-mode: vertical-rl;
-  font-family: var(--serif);
+  font-family: var(--heading);
   font-size: 13px;
   letter-spacing: 0.35em;
   color: #ffffff99;
@@ -637,7 +638,7 @@ legend span {
   color: #ffffff99;
 }
 .category-caption h3 {
-  font-family: var(--serif);
+  font-family: var(--heading);
   font-size: 40px;
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -763,7 +764,7 @@ legend span {
   justify-content: space-between;
   align-items: center;
   margin: 5px 0 7px;
-  font-family: var(--serif);
+  font-family: var(--heading);
   font-size: 24px;
   line-height: 1.2;
 }
@@ -869,7 +870,7 @@ legend span {
 }
 .philosophy-mark {
   display: block;
-  font-family: var(--serif);
+  font-family: var(--heading);
   font-size: 65px;
   color: #919191;
   margin-top: 35px;
@@ -933,6 +934,48 @@ legend span {
 }
 .collection-intro h1 {
   font-size: clamp(50px, 6vw, 86px);
+}
+.collection-sold-out {
+  border-block: 1px solid var(--line);
+  padding: 48px 20px;
+  text-align: center;
+}
+.collection-sold-out .eyebrow {
+  margin-bottom: 12px;
+}
+.collection-sold-out h2 {
+  font-size: clamp(24px, 3vw, 36px);
+  line-height: 1.25;
+}
+.collection-sold-out > p:not(.eyebrow) {
+  margin-top: 12px;
+  color: var(--muted);
+}
+.collection-sold-out .button {
+  margin-top: 24px;
+}
+.collection-page .breadcrumb {
+  padding-block: 16px;
+}
+.collection-page .collection-intro {
+  padding-block: 12px 28px;
+  max-width: 720px;
+}
+.collection-page .collection-intro .eyebrow {
+  margin-bottom: 10px;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+}
+.collection-page .collection-intro h1 {
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.collection-page .collection-intro > p:last-child {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.7;
+  max-width: 560px;
 }
 .collection-intro h1 em {
   color: #898989;
@@ -1425,7 +1468,7 @@ legend span {
   flex: 1;
   outline: 0;
   font-size: 20px;
-  font-family: var(--serif);
+  font-family: var(--heading);
 }
 .search-modal > .muted {
   font-size: 10px;
@@ -1509,7 +1552,7 @@ thead {
   gap: 20px;
   padding: 12px 0;
   border-bottom: 1px solid #d5d5d5;
-  font-family: var(--serif);
+  font-family: var(--heading);
   font-size: 36px;
 }
 .mobile-nav-modal nav > a > span {
@@ -1718,7 +1761,7 @@ thead {
   color: var(--accent);
 }
 .empty-cart h3 {
-  font-family: var(--serif);
+  font-family: var(--heading);
   font-size: 34px;
   line-height: 1.15;
 }
@@ -1892,7 +1935,7 @@ thead {
   border: 1px solid #d5d5d5;
 }
 .order-followup h3 {
-  font-family: var(--serif);
+  font-family: var(--heading);
   font-size: 30px;
 }
 .order-followup p {
@@ -2024,7 +2067,7 @@ thead {
 .story-lead {
   max-width: 700px;
   margin: 0 auto 70px;
-  font-family: var(--serif);
+  font-family: var(--heading);
   font-size: 35px;
   line-height: 1.35;
   text-align: center;
@@ -2250,7 +2293,7 @@ thead {
   gap: 12px;
 }
 .footer-large-wordmark {
-  font-family: var(--serif);
+  font-family: var(--heading);
   line-height: 0.75;
   font-size: clamp(140px, 24vw, 380px);
   letter-spacing: 0.16em;
@@ -4779,7 +4822,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--serif);
+  font-family: var(--heading);
   font-size: clamp(100px, 17vw, 260px);
   font-weight: 400;
   letter-spacing: 0.15em;
@@ -4857,6 +4900,12 @@ body {
 .footer-signature .signature-stage:focus-visible {
   outline: 1px solid #888;
   outline-offset: 3px;
+}
+.footer-brand .footer-signature {
+  justify-content: flex-start;
+  border-top: 0;
+  padding: 0;
+  margin-bottom: 18px;
 }
 @media (max-width: 700px) {
   .footer-signature {

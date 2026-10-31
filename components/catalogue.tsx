@@ -7,6 +7,7 @@ import { SlidersHorizontal, X, ChevronDown } from "lucide-react";
 import { products, colorHex, type Product } from "@/lib/products";
 import { useWishlistStore } from "@/store/useWishlistStore";
 import ProductCard from "./product-card";
+import CategoryNavigation from "./category-navigation";
 
 type CatalogueProps = {
   category?: Product["category"];
@@ -94,6 +95,7 @@ export default function Catalogue({
     );
   return (
     <>
+      {!wishlist && <CategoryNavigation />}
       <div className="catalogue-toolbar">
         <button
           className="filter-toggle"

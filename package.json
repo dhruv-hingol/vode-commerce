@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
     "@fontsource/manrope": "^5.3.0",
     "@hookform/resolvers": "^5.9.2",
     "@react-three/drei": "^10.7.9",

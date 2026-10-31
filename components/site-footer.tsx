@@ -9,9 +9,7 @@ export default function SiteFooter() {
     <footer className="site-footer">
       <div className="footer-grid grid gap-10 md:grid-cols-2 xl:grid-cols-4">
         <div className="footer-brand">
-          <Link className="vode-wordmark" href="/" aria-label="VODE home">
-            VODE<span>®</span>
-          </Link>
+          <FooterSignature />
           <p>
             Pure cotton. Expressive embroidery.
             <br />
@@ -62,7 +60,6 @@ export default function SiteFooter() {
           BACK TO TOP <ArrowUp size={13} />
         </a>
       </div>
-      <FooterSignature />
     </footer>
   );
 }

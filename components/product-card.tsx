@@ -59,8 +59,8 @@ export default function ProductCard({ product, wide = false }: { product: Produc
           {inStock ? "THE NEW EDIT" : "SOLD OUT"}
         </span>
         <WishlistButton id={product.id} />
-        <button className="quick-button" onClick={() => setQuick(true)}>
-          <Plus size={15} /> ADD TO CART
+        <button className="quick-button" disabled={!inStock} onClick={() => setQuick(true)}>
+          {inStock ? <><Plus size={15} /> ADD TO CART</> : "SOLD OUT"}
         </button>
       </div>
       <div className="product-meta">
@@ -94,7 +94,7 @@ export default function ProductCard({ product, wide = false }: { product: Produc
         {product.colors.map((c) => (
           <span key={c} style={{ background: colorHex[c] }} title={c} />
         ))}
-        <small>{product.colors.length} colours</small>
+        <small>{product.colors.length} {product.colors.length === 1 ? "colour" : "colours"}</small>
       </div>
       {quick && (
         <Modal

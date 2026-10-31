@@ -44,6 +44,7 @@ test("sitemap excludes checkout and samples and automatically includes approved 
     absoluteUrl("/shop"),
     absoluteUrl("/about"),
     absoluteUrl("/contact"),
+    absoluteUrl("/collections/t-shirts"),
     absoluteUrl("/collections/shirts"),
     absoluteUrl("/collections/new-arrivals"),
     absoluteUrl("/collections/men"),

@@ -4,6 +4,7 @@ import { brand } from "@/lib/config";
 import { newDropProducts } from "@/lib/products";
 import ProductCard from "./product-card";
 import Reveal from "./reveal";
+import CategoryNavigation from "./category-navigation";
 
 export default function NewDrop() {
   return (
@@ -16,9 +17,7 @@ export default function NewDrop() {
         <div className="new-drop-intro">
           <p className="eyebrow">INTRODUCING / THE NEW DROP</p>
           <h2 id="new-drop-title">
-            The Cotton
-            <br />
-            <em>Signature Drop.</em>
+            The Cotton Signature Drop
           </h2>
           <p>{brand.newDrop.subtitle}</p>
           <Link href="/collections/new-arrivals" className="underlined-link">
@@ -26,6 +25,7 @@ export default function NewDrop() {
           </Link>
         </div>
       </Reveal>
+      <CategoryNavigation />
       <div className="new-drop-products">
         {newDropProducts.map((product, index) => (
           <div key={product.id}>

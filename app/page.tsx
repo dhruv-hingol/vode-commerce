@@ -28,20 +28,12 @@ export default function Home() {
         </div>
         <div className="campaign-copy">
           <p className="eyebrow">A NEW EXPRESSION OF STYLE</p>
-          <h1>
-            New Autumn
-            <br />
-            <em>Collection.</em>
-          </h1>
           <p className="campaign-description">
             Precision in every stitch.
             <br />
             Confidence in every detail.
           </p>
           <div className="hero-actions">
-            <Link href="/shop" className="button light">
-              SHOP NOW <ArrowUpRight size={17} />
-            </Link>
             <Link href="/about" className="hero-story">
               DISCOVER VODE <MoveRight size={18} />
             </Link>
@@ -117,7 +109,6 @@ export default function Home() {
         <Link href="/about" className="underlined-link">
           OUR STORY <ArrowUpRight size={17} />
         </Link>
-        <span className="philosophy-mark">V.</span>
       </Reveal>
       <section className="community-section page-wrap">
         <div className="section-heading">

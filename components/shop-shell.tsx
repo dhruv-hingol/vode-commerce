@@ -10,7 +10,10 @@ import { brand } from "@/lib/config";
 import { BagIcon } from "./icons";
 import { CartItems, OrderTotals } from "./cart-items";
 import Modal from "./modal";
-const links = [{ href: "/collections/men", label: "Men" }];
+const links = [
+  { href: "/collections/men", label: "Men", soldOut: false },
+  { href: "/collections/t-shirts", label: "T-shirts", soldOut: true },
+];
 export default function ShopShell({ children }: { children: React.ReactNode }) {
   const items = useCartStore((s) => s.items);
   const isOpen = useCartStore((s) => s.isOpen);
@@ -81,11 +84,13 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
               key={link.href}
             >
               {link.label}
+              {link.soldOut && <small className="nav-status">Sold out</small>}
             </Link>
           ))}
         </nav>
         <Link href="/" className="vode-wordmark" aria-label="VODE home">
-          VODE<span>®</span>
+          <span className="header-wordmark-text">VODE<sup>®</sup></span>
+          <span className="header-wordmark-caption">COTTON & EXPRESSION</span>
         </Link>
         <div className="header-actions">
           <form action="/shop" role="search" className="header-search">
@@ -104,7 +109,7 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
               type="submit"
               aria-label="Submit search"
             >
-              <Search size={17} />
+              <Search size={18} strokeWidth={1.4} />
             </button>
           </form>
           <button
@@ -120,9 +125,11 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
             aria-label={`Wishlist, ${wishCount} items`}
           >
             <Heart size={20} strokeWidth={1.4} />
-            <small className="wishlist-count" aria-live="polite">
-              {wishCount}
-            </small>
+            {wishCount > 0 && (
+              <small className="wishlist-count" aria-live="polite">
+                {wishCount}
+              </small>
+            )}
           </Link>
           <button
             className="bag-button"
@@ -131,7 +138,7 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
           >
             <BagIcon width={20} height={20} />
             <span className="bag-label">BAG</span>
-            <span className="cart-count">({quantity})</span>
+            <span className="cart-count">{quantity}</span>
           </button>
         </div>
       </header>
@@ -169,6 +176,9 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
               >
                 <span>0{i + 1}</span>
                 {link.label}
+                {"soldOut" in link && link.soldOut && (
+                  <small className="nav-status">Sold out</small>
+                )}
                 <ArrowUpRight size={22} />
               </Link>
             ))}
