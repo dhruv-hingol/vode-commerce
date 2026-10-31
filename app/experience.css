@@ -53,6 +53,10 @@ body,
   position: absolute;
   inset: 0;
 }
+@media (max-width: 767px) {
+  .campaign-hero .hero-video,
+  .campaign-hero .hero-image > img { object-position: 50% 50%; }
+}
 .campaign-slide .campaign-still {
   object-fit: cover;
   object-position: center 60%;
