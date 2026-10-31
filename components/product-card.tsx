@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { ArrowUpRight, Heart, Plus } from "lucide-react";
+import { useRef, useState } from "react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, Heart, Plus } from "lucide-react";
 import { colorHex, variantStock, type Product } from "@/lib/products";
 import { money } from "@/lib/cart";
 import { brand } from "@/lib/config";
@@ -32,29 +32,55 @@ export default function ProductCard({ product, wide = false }: { product: Produc
   const [size, setSize] = useState("");
   const [color, setColor] = useState(product.colors[0]);
   const [error, setError] = useState("");
+  const photos = useRef<HTMLDivElement>(null);
+  const [photoIndex, setPhotoIndex] = useState(0);
   const add = useCartStore((s) => s.addToCart);
   const ready = useCartStore((s) => s.hasHydrated);
   const inStock = product.variants.some((v) => v.stock > 0);
+  function goToPhoto(index: number) {
+    const track = photos.current;
+    if (!track) return;
+    const next = (index + product.gallery.length) % product.gallery.length;
+    track.scrollTo({
+      left: next * track.clientWidth,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    });
+  }
   return (
     <article className="product-card">
       <div className="product-photo">
-        <Link href={`/products/${product.id}`} aria-label={product.name}>
-          <Image
-            src={product.image}
-            alt={product.gallery[0].alt}
-            fill
-            sizes={wide ? "(max-width:700px) 88vw, 44vw" : "(max-width:767px) 88vw, (max-width:1279px) 29vw, 22vw"}
-          />
-          {product.gallery[1] && (
-            <Image
-              className="secondary-photo"
-              src={product.gallery[1].src}
-              alt=""
-              fill
-              sizes={wide ? "(max-width:700px) 88vw, 44vw" : "(max-width:767px) 88vw, (max-width:1279px) 29vw, 22vw"}
-            />
-          )}
-        </Link>
+        <div
+          ref={photos}
+          className="product-image-track"
+          role="group"
+          aria-label={`${product.name} photos`}
+          tabIndex={0}
+          onScroll={(event) => {
+            const track = event.currentTarget;
+            setPhotoIndex(Math.round(track.scrollLeft / track.clientWidth));
+          }}
+        >
+          {product.gallery.map((photo, index) => (
+            <Link href={`/products/${product.id}`} aria-label={`${product.name}${index ? `, photo ${index + 1}` : ""}`} key={photo.src}>
+              <Image src={photo.src} alt={photo.alt} fill sizes={wide ? "(max-width:700px) 48vw, 50vw" : "(max-width:700px) 48vw, (max-width:1199px) 50vw, 48vw"} />
+            </Link>
+          ))}
+        </div>
+        {product.gallery.length > 1 && (
+          <>
+          <button type="button" className="product-image-arrow product-image-arrow--previous" aria-label={`Previous photo of ${product.name}`} onClick={() => goToPhoto(photoIndex - 1)}>
+            <ChevronLeft size={20} strokeWidth={1.5} />
+          </button>
+          <button type="button" className="product-image-arrow product-image-arrow--next" aria-label={`Next photo of ${product.name}`} onClick={() => goToPhoto(photoIndex + 1)}>
+            <ChevronRight size={20} strokeWidth={1.5} />
+          </button>
+          <div className="product-image-pagination" aria-label={`${product.name} image navigation`}>
+            {product.gallery.map((photo, index) => (
+              <button type="button" key={photo.src} aria-label={`Show photo ${index + 1} of ${product.name}`} aria-current={photoIndex === index ? "true" : undefined} onClick={() => goToPhoto(index)}><span /></button>
+            ))}
+          </div>
+          </>
+        )}
         <span className={`product-tag ${!inStock ? "product-tag--sold-out" : ""}`}>
           {inStock ? "THE NEW EDIT" : "SOLD OUT"}
         </span>

@@ -1,12 +1,13 @@
 import { expect, test } from "@playwright/test";
 
-test("two original shirts, simplified navigation and shareable filters", async ({ page }, testInfo) => {
+test("two original shirts, simplified navigation and shareable filters", async ({ page }) => {
   await page.goto("/shop");
   await expect(page.locator(".product-card")).toHaveCount(2);
-  await expect(page.locator(".desktop-nav a")).toHaveCount(2);
-  await expect(page.locator(".desktop-nav a")).toHaveText(["Men", "T-shirtsSold out"]);
+  await expect(page.locator(".desktop-nav a")).toHaveCount(1);
+  await expect(page.locator(".desktop-nav a")).toHaveText(["New Arrival"]);
+  await expect(page.locator(".desktop-nav a")).toHaveAttribute("href", "/collections/shirts");
   await page.locator(".product-grid").scrollIntoViewIfNeeded();
-  expect(await page.locator(".product-grid").evaluate(grid => getComputedStyle(grid).gridTemplateColumns.split(" ").length)).toBe(testInfo.project.name === "mobile" ? 2 : 4);
+  expect(await page.locator(".product-grid").evaluate(grid => getComputedStyle(grid).gridTemplateColumns.split(" ").length)).toBe(2);
   await page.getByRole("button", { name: /FILTER & SORT/ }).click();
   await expect(page.getByRole("complementary", { name: "Filter products" })).toBeVisible();
   await page.getByRole("button", { name: "Chalk", exact: true }).click();
@@ -22,14 +23,40 @@ test("two original shirts, simplified navigation and shareable filters", async (
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
+test("campaign video, editorial rail and product photos work", async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const campaign = page.getByRole("region", { name: "VODE campaign video" });
+  await expect(campaign.locator(".hero-video")).toBeVisible();
+  await expect(campaign.getByRole("button")).toHaveCount(0);
+  await expect(campaign.locator(".campaign-still, .campaign-navigation, .campaign-editorial-copy")).toHaveCount(0);
+
+  const product = page.locator("#new-drop .product-card").first();
+  await product.getByRole("button", { name: /Show photo 2/ }).click();
+  await expect(product.getByRole("button", { name: /Show photo 2/ })).toHaveAttribute("aria-current", "true");
+  const rail = page.locator("#campaign-edit-track");
+  await page.getByRole("button", { name: "Next campaign detail" }).click();
+  await expect.poll(() => rail.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+  await expect(page.getByRole("button", { name: "Previous campaign detail" })).toBeEnabled();
+  await page.getByRole("button", { name: "Previous campaign detail" }).click();
+  await expect.poll(() => rail.evaluate(element => element.scrollLeft)).toBeLessThan(4);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.goto("/");
+  await page.screenshot({ path: testInfo.outputPath("campaign-home.png"), fullPage: true });
+});
+
 test("original photo pairs, wishlist persistence and quick add", async ({ page }) => {
   await page.goto("/");
   const drop = page.locator("#new-drop");
   await expect(drop.locator(".product-card")).toHaveCount(2);
   await expect(drop.locator(".product-photo img").nth(0)).toHaveAttribute("src", /eleven-eleven-01/);
   await expect(drop.locator(".product-photo img").nth(1)).toHaveAttribute("src", /eleven-eleven-02/);
-  await expect(drop.locator(".product-photo img").nth(2)).toHaveAttribute("src", /que-sera-01/);
-  await expect(drop.locator(".product-photo img").nth(3)).toHaveAttribute("src", /que-sera-02/);
+  await expect(drop.locator(".product-photo img").nth(2)).toHaveAttribute("src", /eleven-eleven-closeup-chest/);
+  await expect(drop.locator(".product-photo img").nth(3)).toHaveAttribute("src", /eleven-eleven-closeup-collar/);
+  await expect(drop.locator(".product-photo img").nth(4)).toHaveAttribute("src", /que-sera-01/);
+  await expect(drop.locator(".product-photo img").nth(5)).toHaveAttribute("src", /que-sera-02/);
+  await expect(drop.locator(".product-photo img").nth(6)).toHaveAttribute("src", /que-sera-closeup-collar/);
+  await expect(drop.locator(".product-photo img").nth(7)).toHaveAttribute("src", /que-sera-closeup-chest/);
   const first = drop.locator(".product-card").first();
   await first.getByRole("button", { name: "Save to wishlist" }).click();
   await page.reload();

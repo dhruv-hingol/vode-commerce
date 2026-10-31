@@ -1,11 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, ArrowUpRight, MoveRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import { brand } from "@/lib/config";
 
 import NewDrop from "@/components/new-drop";
-import HeroMedia from "@/components/hero-media";
+import CampaignCarousel from "@/components/campaign-carousel";
+import CampaignEdit from "@/components/campaign-edit";
 import Reveal from "@/components/reveal";
 import StructuredData from "@/components/structured-data";
 import { homeStructuredData, pageMetadata } from "@/lib/seo";
@@ -19,39 +20,7 @@ export default function Home() {
   return (
     <main id="main-content">
       <StructuredData data={homeStructuredData} />
-      <section className="campaign-hero">
-        <HeroMedia />
-        <div className="hero-shade" />
-        <div className="hero-topline">
-          <span>VODE — THE FIRST CHAPTER</span>
-          <span>CONTEMPORARY BY NATURE</span>
-        </div>
-        <div className="campaign-copy">
-          <p className="eyebrow">A NEW EXPRESSION OF STYLE</p>
-          <p className="campaign-description">
-            Precision in every stitch.
-            <br />
-            Confidence in every detail.
-          </p>
-          <div className="hero-actions">
-            <Link href="/about" className="hero-story">
-              DISCOVER VODE <MoveRight size={18} />
-            </Link>
-          </div>
-        </div>
-        <div className="hero-bottom">
-          <a href="#new-drop">
-            SCROLL TO DISCOVER <ArrowDown size={14} />
-          </a>
-          <span>
-            01 <i /> THE NEW PERSPECTIVE
-          </span>
-          <span>DESIGNED TO STAND APART.</span>
-        </div>
-        <span className="hero-sideword" aria-hidden="true">
-          VODE
-        </span>
-      </section>
+      <CampaignCarousel />
       <div className="brand-strip">
         <span>THOUGHTFUL DETAILS</span>
         <span className="strip-star">✳</span>
@@ -62,6 +31,7 @@ export default function Home() {
         <span>RULE THE STREET WITH VODE</span>
       </div>
       <NewDrop />
+      <CampaignEdit />
 
       <section className="craft-section">
         <div className="craft-copy">

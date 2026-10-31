@@ -87,23 +87,13 @@ html {
   color: inherit;
 }
 
-.site-header .header-wordmark-text {
-  position: relative !important;
-  font-family: var(--heading);
-  font-size: 38px;
-  font-weight: 500;
-  letter-spacing: 0.19em;
-  padding-left: 0.19em;
-  line-height: 1;
-}
-
-.header-wordmark-text sup {
-  position: absolute;
-  top: 1px;
-  right: -9px;
-  font-family: var(--sans);
-  font-size: 8px;
-  letter-spacing: 0;
+.site-header .header-wordmark-art {
+  display: block;
+  width: 90px;
+  height: 46px;
+  background-color: #000;
+  -webkit-mask: url("/images/vode-wordmark.png") center / contain no-repeat;
+  mask: url("/images/vode-wordmark.png") center / contain no-repeat;
 }
 
 .site-header .header-wordmark-caption {
@@ -205,10 +195,6 @@ html {
 
   .site-header .vode-wordmark {
     gap: 7px;
-  }
-
-  .site-header .header-wordmark-text {
-    font-size: 29px;
   }
 
   .site-header .header-wordmark-caption {

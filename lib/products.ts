@@ -25,7 +25,7 @@
 
 // Only the two original VODE shirts are listed. Prices, sizes and inventory are
 // preview values until the brand confirms launch details. No invented offers
-// are indexed while isSample=true. Each photo pair stays with its own shirt.
+// are indexed while isSample=true. Each photo gallery stays with its own shirt.
 const shared = {
   category: "Shirts" as const,
   isSample: true,
@@ -53,6 +53,14 @@ export const products: Product[] = [
       {
         src: "/images/drops/eleven-eleven-02.jpg",
         alt: "The 11:11 Cotton Shirt showing red Make a wish embroidery and VODE collar detail",
+      },
+      {
+        src: "/images/drops/eleven-eleven-closeup-chest.jpg",
+        alt: "Close-up of red 11:11 and white Make a wish embroidery on black pinstripe cotton",
+      },
+      {
+        src: "/images/drops/eleven-eleven-closeup-collar.jpg",
+        alt: "Close-up of red VODE collar embroidery and a white button on the black pinstripe shirt",
       },
     ],
     description:
@@ -87,6 +95,14 @@ export const products: Product[] = [
       {
         src: "/images/drops/que-sera-02.jpg",
         alt: "The Que Sera Cotton Shirt close view showing VODE collar embroidery and fine pinstripes",
+      },
+      {
+        src: "/images/drops/que-sera-closeup-collar.jpg",
+        alt: "Close-up of red VODE collar embroidery on white cotton with black pinstripes",
+      },
+      {
+        src: "/images/drops/que-sera-closeup-chest.jpg",
+        alt: "Close-up of red Que Sera, Sera script embroidery on the white pinstripe shirt",
       },
     ],
     description:

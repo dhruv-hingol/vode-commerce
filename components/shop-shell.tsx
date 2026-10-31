@@ -11,8 +11,7 @@ import { BagIcon } from "./icons";
 import { CartItems, OrderTotals } from "./cart-items";
 import Modal from "./modal";
 const links = [
-  { href: "/collections/men", label: "Men", soldOut: false },
-  { href: "/collections/t-shirts", label: "T-shirts", soldOut: true },
+  { href: "/collections/shirts", label: "New Arrival", soldOut: false },
 ];
 export default function ShopShell({ children }: { children: React.ReactNode }) {
   const items = useCartStore((s) => s.items);
@@ -75,14 +74,23 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
           A NEW PERSPECTIVE ON EVERYDAY
         </span>
       </div>
-      <header className={`site-header ${pathname === "/" ? "site-header--home" : ""} ${scrolled ? "is-scrolled" : ""}`}>
-        <button
-          className="icon-button mobile-menu-button"
-          aria-label="Open navigation"
-          onClick={() => setMenu(true)}
-        >
-          <Menu size={22} />
-        </button>
+      <header
+        className={`site-header ${pathname === "/" ? "site-header--home" : ""} ${scrolled ? "is-scrolled" : ""}`}
+      >
+        <div className="header-brand-pill">
+          <button
+            className="icon-button navigation-trigger"
+            aria-label="Open navigation"
+            aria-expanded={menu}
+            aria-haspopup="dialog"
+            onClick={() => setMenu(true)}
+          >
+            <Menu size={22} strokeWidth={1.4} />
+          </button>
+          <Link href="/" className="vode-wordmark" aria-label="VODE home">
+            <span className="header-wordmark-art" aria-hidden="true" />
+          </Link>
+        </div>
         <nav className="desktop-nav" aria-label="Main navigation">
           {links.map((link) => (
             <Link
@@ -95,9 +103,8 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
             </Link>
           ))}
         </nav>
-        <Link href="/" className="vode-wordmark" aria-label="VODE home">
-          <span className="header-wordmark-text">VODE<sup>®</sup></span>
-          <span className="header-wordmark-caption">COTTON & EXPRESSION</span>
+        <Link href="/" className="vode-wordmark desktop-brand" aria-label="VODE home">
+          <span className="header-wordmark-art" aria-hidden="true" />
         </Link>
         <div className="header-actions">
           <form action="/shop" role="search" className="header-search">
@@ -148,8 +155,10 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
             <span className="cart-count">{quantity}</span>
           </button>
           <button
-            className="icon-button desktop-menu-button"
+            className="icon-button desktop-navigation-trigger"
             aria-label="Open navigation"
+            aria-expanded={menu}
+            aria-haspopup="dialog"
             onClick={() => setMenu(true)}
           >
             <Menu size={20} strokeWidth={1.4} />
@@ -166,38 +175,35 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
       {menu && (
         <Modal
           title="Navigation"
-          className="mobile-nav-modal"
+          className="mobile-nav-modal vode-navigation"
           onClose={() => setMenu(false)}
         >
-          <Link
-            href="/"
-            className="vode-wordmark"
-            onClick={() => setMenu(false)}
-          >
-            VODE
-          </Link>
+          <div className="navigation-brand">
+            <Link href="/" className="navigation-logo" aria-label="VODE home" onClick={() => setMenu(false)} />
+          </div>
           <nav aria-label="Mobile navigation">
             {[
+              { href: "/shop", label: "All Products" },
+              { href: "/collections/new-arrivals", label: "New Arrivals" },
+              { href: "/collections/shirts", label: "Shirts" },
+              { href: "/collections/t-shirts", label: "T-shirts", soldOut: true },
               { href: "/", label: "Home" },
-              ...links,
-              { href: "/wishlist", label: "Wishlist" },
-              { href: "/contact", label: "Contact" },
-            ].map((link, i) => (
-              <Link
-                href={link.href}
-                onClick={() => setMenu(false)}
-                key={link.href}
-              >
-                <span>0{i + 1}</span>
+            ].map((link) => (
+              <Link href={link.href} onClick={() => setMenu(false)} key={link.href} aria-current={pathname === link.href ? "page" : undefined}>
                 {link.label}
-                {"soldOut" in link && link.soldOut && (
-                  <small className="nav-status">Sold out</small>
-                )}
-                <ArrowUpRight size={22} />
+                {"soldOut" in link && link.soldOut && <small className="navigation-status">Sold out</small>}
               </Link>
             ))}
           </nav>
-          <p className="eyebrow">RULE THE STREET WITH VODE</p>
+          <div className="navigation-footer">
+            <div className="navigation-secondary">
+              <Link href="/wishlist" onClick={() => setMenu(false)}>Wishlist</Link>
+              <Link href="/about" onClick={() => setMenu(false)}>Our Story</Link>
+              <Link href="/contact" onClick={() => setMenu(false)}>Contact</Link>
+              <a href={brand.instagram} target="_blank" rel="noreferrer">Instagram</a>
+            </div>
+            <button type="button" className="navigation-close-text" onClick={() => setMenu(false)} aria-label="Close menu">Close</button>
+          </div>
         </Modal>
       )}
       {search && (

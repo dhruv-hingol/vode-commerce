@@ -22,7 +22,6 @@ html { scroll-padding-top: 82px; }
 .site-header .desktop-nav > a { font-size: 12px; font-weight: 400; letter-spacing: 0; text-transform: none; }
 .site-header .desktop-nav a::after { background: currentColor; }
 .site-header .vode-wordmark { gap: 0; }
-.site-header .header-wordmark-text { font-size: 26px; font-weight: 500; letter-spacing: 0.12em; }
 .site-header .header-wordmark-caption { display: none; }
 .site-header .header-actions { gap: 8px; }
 .site-header .header-search { display: none; }
@@ -195,7 +194,6 @@ html { scroll-padding-top: 82px; }
   .site-header { gap: 16px; }
   .site-header .desktop-nav { gap: 16px; }
   .site-header .header-actions { gap: 0; }
-  .site-header .header-wordmark-text { font-size: 24px; }
   .catalogue-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .site-footer .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
@@ -208,7 +206,7 @@ html { scroll-padding-top: 82px; }
   .site-header .mobile-menu-button { min-width: 40px; border-radius: 50%; background: #11111108; }
   .site-header--home:not(.is-scrolled) .mobile-menu-button { background: #ffffff26; }
   .site-header .vode-wordmark { justify-self: start; padding-left: 4px; }
-  .site-header .header-wordmark-text { font-size: 22px; }
+  .site-header .header-wordmark-art { width: 74px; height: 38px; }
   .site-header .header-actions { gap: 0; }
   .site-header .mobile-search-button { position: static; left: auto; }
   .site-header .desktop-menu-button { display: none; }

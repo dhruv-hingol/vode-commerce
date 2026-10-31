@@ -4,6 +4,8 @@ import { isPreview, siteDescription, siteUrl } from "@/lib/seo";
 import "./globals.css";
 import "./header.css";
 import "./storefront.css";
+import "./experience.css";
+import "./navigation.css";
 import "@fontsource/manrope/400.css";
 import "@fontsource/manrope/500.css";
 import "@fontsource/inter/400.css";

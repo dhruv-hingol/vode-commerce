@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { brand } from "@/lib/config";
 
 /** Silent looping campaign film, with a static poster for reduced motion/errors. */
-export default function HeroMedia() {
+export default function HeroMedia({ active = true }: { active?: boolean }) {
   const video = useRef<HTMLVideoElement>(null);
   const [failed, setFailed] = useState(false);
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function HeroMedia() {
     if (!media || !brand.campaign.video) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     const playCampaign = () => {
-      if (reduced.matches) media.pause();
+      if (reduced.matches || !active) media.pause();
       else void media.play().catch(() => {});
     };
     playCampaign();
@@ -22,7 +22,7 @@ export default function HeroMedia() {
       reduced.removeEventListener("change", playCampaign);
       media.pause();
     };
-  }, []);
+  }, [active]);
   return (
     <div className="hero-image">
       <Image
