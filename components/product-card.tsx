@@ -55,7 +55,7 @@ export default function ProductCard({ product, wide = false }: { product: Produc
             />
           )}
         </Link>
-        <span className="product-tag">
+        <span className={`product-tag ${!inStock ? "product-tag--sold-out" : ""}`}>
           {inStock ? "THE NEW EDIT" : "SOLD OUT"}
         </span>
         <WishlistButton id={product.id} />

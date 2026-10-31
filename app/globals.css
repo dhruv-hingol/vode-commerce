@@ -1542,18 +1542,20 @@ thead {
   background: #eeeeee;
 }
 .mobile-nav-modal nav {
-  margin: 60px 0 50px;
+  margin: 36px 0 28px;
   display: flex;
   flex-direction: column;
 }
 .mobile-nav-modal nav > a {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 12px 0;
+  gap: 14px;
+  padding: 10px 0;
   border-bottom: 1px solid #d5d5d5;
   font-family: var(--heading);
-  font-size: 36px;
+  font-size: 20px;
+  line-height: 1.5;
+  min-height: 48px;
 }
 .mobile-nav-modal nav > a > span {
   font-size: 8px;
@@ -1563,6 +1565,8 @@ thead {
 }
 .mobile-nav-modal nav > a > svg {
   margin-left: auto;
+  width: 16px;
+  height: 16px;
 }
 .mobile-nav-modal > .eyebrow {
   color: var(--accent);

@@ -24,10 +24,17 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
   const wishCount = useWishlistStore((s) => s.ids.length);
   const [menu, setMenu] = useState(false);
   const [search, setSearch] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [announcement, setAnnouncement] = useState(0);
   const dialog = useRef<HTMLDialogElement>(null);
   const pathname = usePathname();
   const quantity = cartTotals(items).quantity;
+  useEffect(() => {
+    const updateScroll = () => setScrolled(window.scrollY > 32);
+    updateScroll();
+    window.addEventListener("scroll", updateScroll, { passive: true });
+    return () => window.removeEventListener("scroll", updateScroll);
+  }, []);
   useEffect(() => {
     void useCartStore.persist.rehydrate();
     void useWishlistStore.persist.rehydrate();
@@ -68,7 +75,7 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
           A NEW PERSPECTIVE ON EVERYDAY
         </span>
       </div>
-      <header className="site-header">
+      <header className={`site-header ${pathname === "/" ? "site-header--home" : ""} ${scrolled ? "is-scrolled" : ""}`}>
         <button
           className="icon-button mobile-menu-button"
           aria-label="Open navigation"
@@ -139,6 +146,13 @@ export default function ShopShell({ children }: { children: React.ReactNode }) {
             <BagIcon width={20} height={20} />
             <span className="bag-label">BAG</span>
             <span className="cart-count">{quantity}</span>
+          </button>
+          <button
+            className="icon-button desktop-menu-button"
+            aria-label="Open navigation"
+            onClick={() => setMenu(true)}
+          >
+            <Menu size={20} strokeWidth={1.4} />
           </button>
         </div>
       </header>
