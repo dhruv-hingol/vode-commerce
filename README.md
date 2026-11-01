@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-On PowerShell installations that block npm.ps1, use `npm.cmd` instead. Copy `.env.example` to `.env.local` and configure the business WhatsApp number. Never commit `.env.local`. Public environment changes require a server restart or production rebuild.
+On PowerShell installations that block npm.ps1, use `npm.cmd` instead. Copy `.env.example` to `.env.local` and configure the business WhatsApp number. Never commit `.env.local`. The WhatsApp number is read server-side at request time; other public environment changes require a server restart or production rebuild.
 
 ## Application structure
 

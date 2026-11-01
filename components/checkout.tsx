@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { customerSchema } from "@/lib/customer-schema";
-import { brand } from "@/lib/config";
 import { useCartStore } from "@/store/useCartStore";
 import { cartTotals } from "@/lib/cart";
 import { buildWhatsAppUrl, type Customer } from "@/lib/checkout";
@@ -92,9 +91,11 @@ const fields: {
   },
   { name: "landmark", label: "Landmark", placeholder: "A nearby place" },
 ];
-const whatsappNumber = brand.whatsapp;
-
-export default function Checkout() {
+export default function Checkout({
+  whatsappNumber,
+}: {
+  whatsappNumber: string;
+}) {
   const items = useCartStore((state) => state.items);
   const ready = useCartStore((state) => state.hasHydrated);
   const clearCart = useCartStore((state) => state.clearCart);
